@@ -1,28 +1,16 @@
-from datetime import datetime
-
-from flask import Flask, request, flash, redirect, render_template, jsonify, url_for
-from flask_mail import Mail, Message
+from flask import Flask, request, flash, redirect, render_template, url_for
 import re
 import os
 from dotenv import load_dotenv
+import resend
 
 load_dotenv()
 app = Flask(__name__, static_folder='static',
             static_url_path='/static')
 
-# Configuration
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'fallback-secret-key')
 
-# Email configuration
-app.config['MAIL_SERVER'] = os.getenv('MAIL_SERVER', 'smtp.gmail.com')
-app.config['MAIL_PORT'] = int(os.getenv('MAIL_PORT', 587))
-app.config['MAIL_USE_TLS'] = os.getenv('MAIL_USE_TLS', 'True').lower() == 'true'
-app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME')
-app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
-app.config['MAIL_DEFAULT_SENDER'] = os.getenv('MAIL_DEFAULT_SENDER')
-
-# Initialize Flask-Mail
-mail = Mail(app)
+resend.api_key = os.getenv('RESEND_API_KEY')
 
 
 @app.route('/')
@@ -72,28 +60,8 @@ def contact():
                                    })
 
         try:
-            # Prepare email message
-            msg = Message(
-                subject=f'New Contact Form Submission from {name}',
-                recipients=[app.config['MAIL_USERNAME']],  # Send to yourself
-                reply_to=email  # So you can reply directly to the sender
-            )
-
-            # Email body
-            msg.body = f"""
-            New contact form submission:
-
-            Name: {name}
-            Email: {email}
-            Message:
-            {message}
-
-            ---
-            This message was sent from your portfolio website contact form.
-            """
-
-            # HTML version (optional)
-            msg.html = f"""
+            # Prepare email message using Resend API
+            html_content = f"""
             <!DOCTYPE html>
             <html>
             <body>
@@ -108,14 +76,41 @@ def contact():
             </html>
             """
 
+            text_content = f"""
+            New contact form submission:
+
+            Name: {name}
+            Email: {email}
+            Message:
+            {message}
+
+            ---
+            This message was sent from your portfolio website contact form.
+            """
+
+            sender_email = os.getenv('RESEND_FROM_EMAIL', 'onboarding@resend.dev')
+            recipient_email = os.getenv('RESEND_TO_EMAIL')
+
+            if not recipient_email:
+                raise ValueError("RESEND_TO_EMAIL environment variable is not set")
+
+            params = {
+                "from": f"Portfolio Contact <{sender_email}>",
+                "to": [recipient_email],
+                "subject": f'New Contact Form Submission from {name}',
+                "html": html_content,
+                "text": text_content,
+                "reply_to": email
+            }
+
             # Send the email
-            mail.send(msg)
+            email_response = resend.Emails.send(params)
 
             print(f"Contact Form Submission:")
             print(f"Name: {name}")
             print(f"Email: {email}")
             print(f"Message: {message}")
-            print(f"Email sent successfully!")
+            print(f"Email sent successfully! Response ID: {email_response.get('id')}")
 
             flash('Message sent successfully!', 'success')
             return redirect(url_for('contact'))
@@ -125,12 +120,16 @@ def contact():
             print(f"Error sending email: {error_message}")
 
             # Provide user-friendly error message
-            if "authentication failed" in error_message.lower():
-                flash('Email configuration error. Please contact the site administrator.', 'error')
-            elif "connection refused" in error_message.lower():
-                flash('Could not connect to email server. Please try again later.', 'error')
+            if "authentication" in error_message.lower():
+                flash('Email service configuration error. Please contact the site administrator.', 'error')
+            elif "connection" in error_message.lower():
+                flash('Could not connect to email service. Please try again later.', 'error')
+            elif "RESEND_TO_EMAIL" in error_message:
+                flash('Email recipient not configured. Please contact site administrator.', 'error')
+            elif "rate limit" in error_message.lower():
+                flash('Email service temporarily unavailable. Please try again in a few minutes.', 'error')
             else:
-                flash(f'Error sending message: {error_message}', 'error')
+                flash('Error sending message. Please try again later.', 'error')
 
             return render_template('index.html',
                                    active_page='contact',
