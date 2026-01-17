@@ -300,8 +300,9 @@ article[data-page].active {
     opacity: 0;
     visibility: visible;
     transition: var(--transition2);
-    max-height: 500px;
-    transition: max-height var(--transition2), opacity var(--transition2);
+    max-height: 300px;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .sidebar.active .sidebar-info-more {
