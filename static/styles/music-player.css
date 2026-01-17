@@ -1,0 +1,308 @@
+.music-controls {
+    display: grid;
+    gap: 8px;
+    padding: 10px;
+    background: var(--border-gradient-onyx);
+    border-radius: 10px;
+    box-shadow: var(--shadow2);
+    position: relative;
+    isolation: isolate;
+    max-width: 320px;
+    margin: 0 auto;
+}
+
+.volume-controls {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+}
+
+.volume-level {
+    color: var(--light-gray70);
+    font-size: 10px;
+    font-weight: var(--fw400);
+    min-width: 35px;
+    text-align: right;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    letter-spacing: 0.5px;
+}
+
+.music-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    background: var(--jet);
+    color: var(--light-gray70);
+    display: grid;
+    place-items: center;
+    font-size: 12px;
+    transition: all var(--transition1);
+    cursor: pointer;
+    border: none;
+    touch-action: manipulation;
+    flex-shrink: 0;
+}
+
+.music-btn:hover,
+.music-btn:focus-visible {
+    background: var(--orange-yellow-crayola);
+    color: var(--smoky-black);
+    transform: scale(1.1);
+}
+
+.music-btn.playing {
+    background: var(--orange-yellow-crayola);
+    color: var(--smoky-black);
+}
+
+.music-btn.playing i {
+    color: var(--smoky-black) !important;
+}
+
+.music-btn:not(.playing) i {
+    color: var(--light-gray70) !important;
+}
+
+.now-playing {
+    display: grid;
+    gap: 6px;
+    margin-top: 8px;
+    padding: 8px;
+    background: var(--border-gradient-onyx);
+    border-radius: 8px;
+    position: relative;
+    isolation: isolate;
+}
+
+.now-playing::before {
+    content: '';
+    position: absolute;
+    inset: 1px;
+    background: var(--bg-gradient-jet);
+    border-radius: inherit;
+    z-index: -1;
+}
+
+.song-title {
+    color: var(--orange-yellow-crayola);
+    font-size: 11px;
+    font-weight: var(--fw500);
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: 0 5px;
+    direction: ltr;
+    max-width: 100%;
+}
+
+.playback-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+.playback-btn {
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    background: var(--jet);
+    color: var(--light-gray70);
+    display: grid;
+    place-items: center;
+    font-size: 11px;
+    transition: all var(--transition1);
+    cursor: pointer;
+    border: none;
+    touch-action: manipulation;
+    flex-shrink: 0;
+}
+
+.playback-btn:hover,
+.playback-btn:focus-visible {
+    background: var(--orange-yellow-crayola);
+    color: var(--smoky-black);
+    transform: scale(1.1);
+}
+
+.playback-btn.active {
+    background: var(--orange-yellow-crayola);
+    color: var(--smoky-black);
+}
+
+.progress-container {
+    width: 100%;
+    margin-top: 4px;
+    contain: layout style;
+}
+
+.time-display {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 4px;
+    color: var(--light-gray70);
+    font-size: 10px;
+    font-weight: var(--fw400);
+    font-variant-numeric: tabular-nums;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    letter-spacing: 0.5px;
+}
+
+.slider {
+    -webkit-appearance: none;
+    appearance: none;
+    background: var(--jet);
+    border-radius: 8px;
+    outline: none;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all var(--transition1);
+    --slider-color: var(--light-gray70);
+    touch-action: manipulation;
+    width: 100%;
+    height: 6px;
+    margin: 0;
+}
+
+#volume-slider {
+    flex: 1;
+    min-width: 0;
+    height: 5px;
+}
+
+#progress-slider {
+    margin-top: 2px;
+    height: 5px;
+}
+
+.slider::-webkit-slider-track {
+    background: var(--jet);
+    border-radius: 8px;
+    height: 4px;
+}
+
+.slider::-moz-range-track {
+    background: var(--jet);
+    border-radius: 8px;
+    height: 4px;
+}
+
+.slider::-webkit-slider-runnable-track {
+    background: linear-gradient(
+        to right,
+        var(--slider-color) var(--slider-percent, 0%),
+        transparent var(--slider-percent, 0%)
+    );
+    height: 4px;
+    border-radius: 8px;
+}
+
+.slider::-moz-range-progress {
+    background: var(--slider-color);
+    height: 4px;
+    border-radius: 8px;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    border-radius: 50%;
+    border: 2px solid var(--smoky-black);
+    cursor: pointer;
+    position: relative;
+    z-index: 2;
+    transition: all var(--transition1);
+    will-change: transform;
+    width: 12px;
+    height: 12px;
+    background: var(--slider-color);
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+    margin-top: -4px;
+}
+
+.slider::-moz-range-thumb {
+    border-radius: 50%;
+    border: 2px solid var(--smoky-black);
+    cursor: pointer;
+    position: relative;
+    z-index: 2;
+    transition: all var(--transition1);
+    will-change: transform;
+    width: 12px;
+    height: 12px;
+    background: var(--slider-color);
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 480px) {
+}
+
+.sidebar.active .music-controls {
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+.music-player.mini {
+    max-width: 280px;
+    margin: 5px auto;
+}
+
+.music-player.mini .volume-controls {
+    grid-template-columns: 1fr;
+    gap: 6px;
+}
+
+.music-player.mini .music-btn {
+    width: 24px;
+    height: 24px;
+    font-size: 10px;
+}
+
+.music-player.mini .volume-level {
+    text-align: center;
+    font-size: 9px;
+    min-width: auto;
+}
+
+.music-player.mini .slider {
+    height: 4px;
+}
+
+.music-player.mini .slider::-webkit-slider-thumb,
+.music-player.mini .slider::-moz-range-thumb {
+    width: 10px;
+    height: 10px;
+}
+
+@media (max-width: 320px) {
+    .music-controls {
+        padding: 8px;
+        gap: 6px;
+    }
+
+    .music-btn,
+    .playback-btn {
+        width: 24px;
+        height: 24px;
+        font-size: 10px;
+    }
+
+    .song-title {
+        font-size: 10px;
+    }
+
+    .slider::-webkit-slider-thumb,
+    .slider::-moz-range-thumb {
+        width: 10px;
+        height: 10px;
+    }
+}
+
+.sidebar-info-more .music-controls {
+    position: relative;
+    z-index: 1;
+}

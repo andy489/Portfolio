@@ -1,0 +1,222 @@
+@media (min-width: 580px) {
+    :root {
+        --fs1: 32px;
+        --fs2: 24px;
+        --fs3: 26px;
+        --fs4: 18px;
+        --fs6: 15px;
+        --fs7: 15px;
+        --fs8: 12px;
+    }
+
+    .sidebar, article {
+        width: 520px;
+        margin-inline: auto;
+        padding: 30px;
+    }
+
+    .article-title {
+        font-weight: var(--fw600);
+        padding-bottom: 15px;
+    }
+
+        .article-title::after {
+            width: 40px;
+            height: 5px;
+        }
+
+    .icon-box {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        font-size: 18px;
+    }
+
+    main {
+        margin-top: 60px;
+        margin-bottom: 100px;
+    }
+
+    .sidebar {
+        max-height: 180px;
+        margin-bottom: 30px;
+    }
+
+    .sidebar.active { max-height: 584px; }
+
+    .sidebar-info {
+        gap: 30px;
+    }
+
+
+    .info-content .name { margin-bottom: 15px; }
+    .info-content .title { padding: 5px 10px; }
+
+    .info-more-btn {
+        top: -30px;
+        right: -30px;
+        padding: 10px 15px;
+    }
+
+    .info-more-btn span {
+        display: block;
+        font-size: var(--fs8);
+    }
+
+        .info-more-btn ion-icon { display: none; }
+
+    .separator { margin: 32px 0; }
+
+    .contacts-list { gap: 20px; }
+
+    .contact-info {
+        max-width: calc(100% - 64px);
+        width: calc(100% - 64px);
+    }
+
+    .navbar { border-radius: 20px 20px 0 0; }
+
+    .navbar-list { gap: 20px; }
+    .navbar-link { --fs8: 14px; }
+
+    .about .article-title { margin-bottom: 20px; }
+    .about-text { margin-bottom: 40px; }
+
+    .service-item {
+        display: flex;
+        justify-content: flex-start;
+        align-items: flex-start;
+        gap: 18px;
+        padding: 30px;
+    }
+
+    .service-icon-box {
+        margin-bottom: 0;
+        margin-top: 5px;
+    }
+
+    .service-content-box { text-align: left; }
+
+    .testimonials-title { margin-bottom: 25px; }
+
+    .testimonials-list {
+        gap: 30px;
+        margin: 0 -30px;
+        padding: 30px;
+        padding-bottom: 35px;
+    }
+
+    .content-card {
+        padding: 30px;
+        padding-top: 25px;
+    }
+
+    .testimonials-avatar-box {
+        transform: translate(30px, -30px);
+        border-radius: 28px;
+    }
+
+    .testimonials-avatar-box img { width: 80px; }
+
+    .testimonials-item-title {
+        margin-bottom: 10px;
+        margin-left: 95px;
+    }
+
+    .testimonials-text {
+        line-clamp: 2;
+        -webkit-line-clamp: 2;
+    }
+
+    .modal-container {padding: 20px; }
+
+    .testimonials-modal {
+        display: flex;
+        justify-content: flex-start;
+        align-items: stretch;
+        gap: 25px;
+        padding: 30px;
+        border-radius: 20px;
+    }
+
+    .modal-img-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .modal-avatar-box {
+        border-radius: 18px;
+        margin-bottom: 0;
+    }
+
+        .modal-avatar-box img { width: 65px; }
+
+    .modal-img-wrapper > img {
+        display: block;
+        position: relative;
+        /* flex-grow: 1; */
+        width: 35px;
+        top: 50px;
+    }
+
+    .cert-list {
+        gap: 25px;
+        margin: 0 -30px;
+        padding: 45px;
+        scroll-padding-inline: 45px;
+    }
+
+    .cert-item { min-width: calc(33..33% - 35px); }
+
+    .timeline-list { margin-left: 65px; }
+
+    .timeline-item:not(:last-child)::before { left: -40px; }
+
+    .timeline-item::after {
+        height: 8px;
+        width: 8px;
+        left: -43px;
+    }
+
+    .skills-item:not(:last-child) { margin-bottom: 25px; }
+
+    .project-img, .blog-banner-box { border-radius: 16px; }
+
+    .blog-posts-list { gap: 30px; }
+
+    .blog-content { padding: 25px; }
+
+    .mapbox {
+        height: 380px;
+        border-radius: 18px;
+    }
+
+    .input-wrapper {
+        gap: 30px;
+        margin-bottom: 30px;
+    }
+
+    .form-input { padding: 15px 20px; }
+
+    textarea.form-input { margin-bottom: 30px; }
+
+    .form-btn {
+        --fs-6: 16px;
+        padding: 16px 20px;
+    }
+
+    .form-btn ion-icon { font-size: 18px; }
+
+    .avatar-box img {
+        width: 115px;
+    }
+
+    .cert-list {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .cert-img-wrapper {
+        padding-bottom: 60%;
+    }
+}
