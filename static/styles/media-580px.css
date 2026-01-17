@@ -39,7 +39,6 @@
 
     .sidebar {
         max-height: 180px;
-        overflow-y: auto;
         margin-bottom: 30px;
     }
 

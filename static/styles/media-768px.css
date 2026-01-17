@@ -1,10 +1,6 @@
 @media (min-width: 768px) {
 
-    .sidebar, article {
-        width: 700px;
-        overflow-y: auto;
-        overflow-x: hidden;
-     }
+    .sidebar, article { width: 700px; }
 
     .has-scrollbar::-webkit-scrollbar-button { width: 100px; }
 

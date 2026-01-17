@@ -100,8 +100,14 @@ main {
     box-shadow: var(--shadow1);
     z-index: 1;
     padding: 15px;
+
     overflow-y: auto;
-    overflow-x: hidden;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.sidebar::-webkit-scrollbar {
+    display: none;
 }
 
 .sidebar.active { max-height: 405px; }
@@ -222,7 +228,7 @@ article[data-page].active {
 .sidebar {
     margin-bottom: 15px;
     max-height: 112px;
-    overflow: visible;
+    overflow: hidden;
     padding: 15px;
     transition: var(--transition2);
 }
@@ -298,11 +304,8 @@ article[data-page].active {
 
 .sidebar-info-more {
     opacity: 0;
-    visibility: visible;
+    visibility: hidden;
     transition: var(--transition2);
-    max-height: 300px;
-    overflow-y: auto;
-    overflow-x: hidden;
 }
 
 .sidebar.active .sidebar-info-more {

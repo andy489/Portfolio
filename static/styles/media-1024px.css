@@ -9,8 +9,6 @@
     .sidebar, article {
         width: 950px;
         box-shadow: var(--shadow5);
-        overflow-y: auto;
-        overflow-x: hidden;
     }
 
     main { margin-bottom: 60px; }
