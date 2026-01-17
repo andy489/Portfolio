@@ -1,0 +1,213 @@
+<article class="blog" data-page="blog">
+    <header>
+        <h2 class="h2 article-title">Blog</h2>
+    </header>
+
+    <section class="blog-posts">
+        <ul class="blog-posts-list">
+            <li class="blog-post-item">
+                <a href="https://github.com/andy489/Empirical_Methods_and_Statistics/blob/master/_lec/SEM%20L12%20(2020-12-17).pdf"
+                   target="_blank">
+                    <figure class="blog-banner-box">
+                        <img src="{{ url_for('static', filename='images/blogs/_blog-01.png') }}"
+                             alt="CLT"
+                             loading="lazy">
+                    </figure>
+
+                    <div class="blog-content">
+                        <div class="blog-meta">
+                            <p class="blog-category">Statistics</p>
+                            <span class="dot"></span>
+                            <time datetime="2020-12-17">December 17, 2020</time>
+                        </div>
+
+                        <h3 class="h3 blog-item-title">Universal Truth Amidst Chaos</h3>
+                        <p class="blog-text">
+                            No matter the shape of the original population distribution (skewed, discrete, multi-modal,
+                            etc.), the sample mean (and sums) tends toward a normal distribution as sample size grows.
+                            This is astonishing — it means an elegant, universal pattern emerges from almost any
+                            randomness when we aggregate data.
+                        </p>
+                    </div>
+                </a>
+            </li>
+
+            <li class="blog-post-item">
+                <a href="https://github.com/andy489/Empirical_Methods_and_Statistics/blob/master/_additional/Number%20of%20sixes%20probability%20(Chebyshev%20%26%20CLT).pdf"
+                   target="_blank">
+                    <figure class="blog-banner-box">
+                        <img src="{{ url_for('static', filename='images/blogs/_blog-02.png') }}"
+                             alt="Dice sixes"
+                             loading="lazy">
+                    </figure>
+
+                    <div class="blog-content">
+                        <div class="blog-meta">
+                            <p class="blog-category">Statistics</p>
+                            <span class="dot"></span>
+                            <time datetime="2021-01-15">January 15, 2021</time>
+                        </div>
+
+                        <h3 class="h3 blog-item-title">
+                            31/36 Certainty: The √n Boundary for Dice Sixes
+                        </h3>
+                        <p class="blog-text">
+                            <b>Central Limit Theorem in Action: Dice Edition.</b>
+                            Roll a fair die n times. The number of sixes will almost certainly stay within √n of the
+                            expected n/6. In fact, Markov's inequality guarantees this happens with probability at least
+                            31/36 – an elegant demonstration of how randomness yields predictable patterns when
+                            aggregated.
+                        </p>
+                    </div>
+                </a>
+            </li>
+
+            <li class="blog-post-item">
+                <a href="https://github.com/andy489/Empirical_Methods_and_Statistics/blob/master/_additional/Dices%20with%20same%20distribution.pdf"
+                   target="_blank">
+                    <figure class="blog-banner-box">
+                        <img src="{{ url_for('static', filename='images/blogs/_blog-04.png') }}"
+                             alt="Dices Distribution"
+                             loading="lazy">
+                    </figure>
+
+                    <div class="blog-content">
+                        <div class="blog-meta">
+                            <p class="blog-category">Combinatorics</p>
+                            <span class="dot"></span>
+                            <time datetime="2023-09-16">October 16, 2023</time>
+                        </div>
+
+                        <h3 class="h3 blog-item-title">
+                            Building a Perfect Pair of "Doppelgänger" Dice
+                        </h3>
+                        <p class="blog-text">
+                            Roll two ordinary dice—the familiar 1 through 6. That bell curve of possible sums is
+                            mathematically sacred. But what if I told you there exists a different, secret pair of dice,
+                            numbered with positive whole numbers, that creates the exact same sum distribution? No
+                            trick, no gimmick—just a beautiful and counterintuitive puzzle from the world of
+                            combinatorics.
+                        </p>
+                    </div>
+                </a>
+            </li>
+
+            <li class="blog-post-item">
+                <a href="https://github.com/andy489/Fast_Algorithms_in_Data_Structures/blob/main/Suffix%20Automaton/SAM%20Test%20Case%2001.pdf"
+                   target="_blank">
+                    <figure class="blog-banner-box">
+                        <img src="{{ url_for('static', filename='images/blogs/_blog-03.png') }}"
+                             alt="Suffix Automaton"
+                             loading="lazy">
+                    </figure>
+
+                    <div class="blog-content">
+                        <div class="blog-meta">
+                            <p class="blog-category">Graphs</p>
+                            <span class="dot"></span>
+                            <time datetime="2022-06-24">June 24, 2022</time>
+                        </div>
+
+                        <h3 class="h3 blog-item-title">
+                            Building Suffix Automaton
+                        </h3>
+                        <p class="blog-text">
+                            A suffix automaton is a minimal finite automaton that recognizes all suffixes of a string.
+                            Built online by adding characters sequentially, it maintains equivalence classes of end
+                            positions using suffix links. This efficient O(n) algorithm compresses all substrings into
+                            a compact directed acyclic graph structure, enabling fast substring queries and pattern
+                            matching.
+                        </p>
+                    </div>
+                </a>
+            </li>
+
+            <li class="blog-post-item">
+                <a href="https://github.com/andy489/Discrete_Structures/blob/master/DS-1/%5BG%5D%20Graphs/G14.pdf"
+                   target="_blank">
+                    <figure class="blog-banner-box">
+                        <img src="{{ url_for('static', filename='images/blogs/_blog-07.png') }}"
+                             alt="Coloring Graphs"
+                             loading="lazy">
+                    </figure>
+
+                    <div class="blog-content">
+                        <div class="blog-meta">
+                            <p class="blog-category">Graphs</p>
+                            <span class="dot"></span>
+                            <time datetime="2025-08-23">August 8, 2025</time>
+                        </div>
+
+                        <h3 class="h3 blog-item-title">
+                            Odd Cycles in a Complete Flight Network
+                        </h3>
+                        <p class="blog-text">
+                            This problem explores a densely connected system controlled by only two agents. Using ideas
+                            from graph theory and parity, it reveals that complex cyclic structures must inevitably
+                            arise, even under strong constraints, highlighting hidden order within seemingly uniform
+                            networks.
+                        </p>
+                    </div>
+                </a>
+            </li>
+
+            <li class="blog-post-item">
+                <a href="https://github.com/andy489/Empirical_Methods_and_Statistics/blob/master/_additional/Dice%20process.pdf"
+                   target="_blank">
+                    <figure class="blog-banner-box">
+                        <img src="{{ url_for('static', filename='images/blogs/_blog-05.png') }}"
+                             alt="Rolling Die"
+                             loading="lazy">
+                    </figure>
+
+                    <div class="blog-content">
+                        <div class="blog-meta">
+                            <p class="blog-category">Combinatorics</p>
+                            <span class="dot"></span>
+                            <time datetime="2024-09-23">September 23, 2024</time>
+                        </div>
+
+                        <h3 class="h3 blog-item-title">
+                            The Modular Clock of a Rolling Die
+                        </h3>
+                        <p class="blog-text">
+                            Roll a four-sided die, sum the results. Stop when the total syncs perfectly with the number
+                            four. The waiting game has a precise, elegant expectation. Not a guess, but a certainty
+                            hidden within the chaos. How many rolls? The answer is a quiet integer, waiting in the
+                            noise.
+                        </p>
+                    </div>
+                </a>
+            </li>
+
+            <li class="blog-post-item">
+                <a href="https://github.com/andy489/Empirical_Methods_and_Statistics/blob/master/_additional/_inter/musicians_cencerts_sol.pdf"
+                   target="_blank">
+                    <figure class="blog-banner-box">
+                        <img src="{{ url_for('static', filename='images/blogs/_blog-06.png') }}"
+                             alt=""
+                             loading="lazy">
+                    </figure>
+
+                    <div class="blog-content">
+                        <div class="blog-meta">
+                            <p class="blog-category">Combinatorics</p>
+                            <span class="dot"></span>
+                            <time datetime="025-11-27">November 27, 2025</time>
+                        </div>
+
+                        <h3 class="h3 blog-item-title">
+                            A Combinatorial Symphony
+                        </h3>
+                        <p class="blog-text">
+                            This engaging challenge draws you into a carefully orchestrated scenario involving
+                            collaboration, balance, and efficiency. Perfect for curious minds, it invites readers to
+                            uncover how thoughtful structure can lead to optimal outcomes without revealing all its
+                            secrets upfront.
+                        </p>
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </section>
+</article>

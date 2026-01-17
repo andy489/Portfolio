@@ -1,0 +1,54 @@
+<article class="contact" data-page="contact">
+    <header>
+        <h2 class="h2 article-title">Contact</h2>
+    </header>
+
+    <section class="mapbox" data-mapbox>
+        <figure>
+            <iframe width="600"
+                    height="450"
+                    style="border:0;"
+                    src="https://maps.google.com/maps?q=Sofia%20tech%20Park&t=m&z=14&ie=UTF8&iwloc=&output=embed"
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+        </figure>
+    </section>
+
+    <section class="contact-form">
+        <h3 class="h3 form-title">Contact Form</h3>
+
+        <!-- Add Flash Messages Section -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}"
+             style="margin: 10px 0; padding: 10px; border-radius: 5px;
+                            {% if category == 'success' %}
+                                background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb;
+                            {% elif category == 'error' %}
+                                background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb;
+                            {% endif %}">
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        <form method="POST" action="{{ url_for('contact') }}" class="form" data-form>
+            <div class="input-wrapper">
+                <input type="text" name="fullname" class="form-input" placeholder="Full name" required
+                       value="{{ form_data.fullname if form_data and form_data.fullname else '' }}">
+                <input type="email" name="email" class="form-input" placeholder="Email Address" required
+                       value="{{ form_data.email if form_data and form_data.email else '' }}">
+            </div>
+
+            <textarea name="message" class="form-input" placeholder="Your Message" required>{{ form_data.message if form_data and form_data.message else '' }}</textarea>
+
+            <button class="form-btn" type="submit" data-form-btn>
+                <i class="fas fa-paper-plane"></i>
+                <span>Send Message</span>
+            </button>
+        </form>
+    </section>
+</article>

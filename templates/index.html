@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Andrey's Portfolio</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/music-player.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/side-projects.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/media-450px.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/media-580px.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/media-768px.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/media-1024px.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/media-1250px.css') }}">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}"/>
+</head>
+<body>
+<main>
+    {% include 'partials/sidebar.html' %}
+
+    <div class="main-content">
+
+
+        {% include 'partials/navigation.html' %}
+
+        <article class="about {{ 'active' if active_page == 'about' else '' }}" data-page="about">
+            {% include 'partials/about.html' %}
+        </article>
+
+        <article class="resume {{ 'active' if active_page == 'resume' else '' }}" data-page="resume">
+            {% include 'partials/resume.html' %}
+        </article>
+
+        <article class="portfolio {{ 'active' if active_page == 'portfolio' else '' }}" data-page="portfolio">
+            {% include 'partials/portfolio.html' %}
+        </article>
+
+        <article class="blog {{ 'active' if active_page == 'blog' else '' }}" data-page="blog">
+            {% include 'partials/blog.html' %}
+        </article>
+
+        <article class="contact {{ 'active' if active_page == 'contact' else '' }}" data-page="contact">
+            {% include 'partials/contact.html' %}
+        </article>
+    </div>
+
+</main>
+<script src="{{ url_for('static', filename='scripts/navigation.js') }}"></script>
+<script src="{{ url_for('static', filename='scripts/script.js') }}"></script>
+<script src="{{ url_for('static', filename='scripts/music-player.js') }}"></script>
+</body>
+</html>

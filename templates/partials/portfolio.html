@@ -1,0 +1,439 @@
+<article class="portfolio" data-page="portfolio">
+    <header>
+        <h2 class="h2 article-title">Portfolio</h2>
+    </header>
+
+    <section class="projects">
+        <ul class="filter-list">
+            <li class="filter-item">
+                <button class="active" data-filter-btn>All</button>
+            </li>
+            <li class="filter-item">
+                <button data-filter-btn>Web Development</button>
+            </li>
+            <li class="filter-item">
+                <button data-filter-btn>Math & Statistics</button>
+            </li>
+            <li class="filter-item">
+                <button data-filter-btn>Applications</button>
+            </li>
+            <li class="filter-item">
+                <button data-filter-btn>Data Analysis</button>
+            </li>
+        </ul>
+
+        <div class="filter-select-box">
+            <button class="filter-select" data-select>
+                <span class="select-value" data-select-value>
+                    Select Category
+                </span>
+            </button>
+
+            <ul class="select-list">
+                <li class="select-item">
+                    <button data-select-item>All</button>
+                </li>
+                <li class="select-item">
+                    <button data-select-item>Web Development</button>
+                </li>
+                <li class="select-item">
+                    <button data-select-item>Math & Statistics</button>
+                </li>
+                <li class="select-item">
+                    <button data-select-item>Applications</button>
+                </li>
+                <li class="select-item">
+                    <button data-select-item>Data Analysis</button>
+                </li>
+            </ul>
+        </div>
+
+        <div id="zoomModal" class="zoom-modal">
+            <span class="close-zoom-modal">&times;</span>
+            <img class="modal-content" id="zoomedImage">
+        </div>
+
+        <ul class="project-list">
+
+            <li class="project-item active" data-filter-item data-category="web development">
+                <a href="https://github.com/andy489/Guess_Card_Game"
+                   target="_blank">
+                    <figure class="project-img">
+                        <div class="project-item-icon-box">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <div class="project-item-zoom-box" data-zoom-btn>
+                            <i class="fas fa-search-plus"></i>
+                        </div>
+
+                        <img src="{{ url_for('static', filename='images/portfolio/_10-guess-card.png') }}"
+                             alt="Guess Card Game"
+                             loading="lazy" data-project-img>
+                    </figure>
+
+                    <h3 class="project-title">Guess Card Game</h3>
+                    <p class="project-category">Web Development</p>
+                </a>
+            </li>
+
+            <li class="project-item active" data-filter-item data-category="web development">
+                <a href="https://github.com/andy489/Pathfinder"
+                   target="_blank">
+                    <figure class="project-img">
+                        <div class="project-item-icon-box">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <div class="project-item-zoom-box" data-zoom-btn>
+                            <i class="fas fa-search-plus"></i>
+                        </div>
+
+                        <img src="{{ url_for('static', filename='images/portfolio/_12-pathfinder.png') }}"
+                             alt="Pathfinder"
+                             loading="lazy" data-project-img>
+                    </figure>
+
+                    <h3 class="project-title">Pathfinder</h3>
+                    <p class="project-category">Web Development</p>
+                </a>
+            </li>
+
+            <li class="project-item active" data-filter-item data-category="math & statistics">
+                <a href="https://github.com/andy489/Galton_Machine_Simulator" target="_blank">
+                    <figure class="project-img">
+                        <div class="project-item-icon-box">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <div class="project-item-zoom-box" data-zoom-btn>
+                            <i class="fas fa-search-plus"></i>
+                        </div>
+
+                        <img src="{{ url_for('static', filename='images/portfolio/_01-galton-poster.png') }}"
+                             alt="Galton Machine (Plinko)" loading="lazy" data-project-img>
+                    </figure>
+
+                    <h3 class="project-title">Galton Beam Machine (Plinko)</h3>
+                    <p class="project-category">Math & Statistics</p>
+                </a>
+            </li>
+
+            <li class="project-item active" data-filter-item data-category="data analysis">
+                <a href="https://github.com/andy489/Python_Pro_Bootcamp/blob/main/PPB/day_080/day_080.ipynb"
+                   target="_blank">
+                    <figure class="project-img">
+                        <div class="project-item-icon-box">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <div class="project-item-zoom-box" data-zoom-btn>
+                            <i class="fas fa-search-plus"></i>
+                        </div>
+
+                        <img src="{{ url_for('static', filename='images/portfolio/_15-t-tests.png') }}"
+                             alt="t-tests"
+                             loading="lazy" data-project-img>
+                    </figure>
+
+                    <h3 class="project-title">Kernel Density Estimate</h3>
+                    <p class="project-category">Data Analysis</p>
+                </a>
+            </li>
+
+            <li class="project-item active" data-filter-item data-category="web development">
+                <a href="https://github.com/andy489/MyMobile"
+                   target="_blank">
+                    <figure class="project-img">
+                        <div class="project-item-icon-box">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <div class="project-item-zoom-box" data-zoom-btn>
+                            <i class="fas fa-search-plus"></i>
+                        </div>
+
+                        <img src="{{ url_for('static', filename='images/portfolio/_11-my-mobile.png') }}"
+                             alt="Guess Card Game"
+                             loading="lazy" data-project-img>
+                    </figure>
+
+                    <h3 class="project-title">My Mobile</h3>
+                    <p class="project-category">Web Development</p>
+                </a>
+            </li>
+
+            <li class="project-item active" data-filter-item data-category="web development">
+                <a href="https://github.com/andy489/Python_Pro_Bootcamp/tree/main/PPB/day_069"
+                   target="_blank">
+                    <figure class="project-img">
+                        <div class="project-item-icon-box">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <div class="project-item-zoom-box" data-zoom-btn>
+                            <i class="fas fa-search-plus"></i>
+                        </div>
+
+                        <img src="{{ url_for('static', filename='images/portfolio/_14-blog-post.png') }}"
+                             alt="Blog Post"
+                             loading="lazy" data-project-img>
+                    </figure>
+
+                    <h3 class="project-title">Blog Post</h3>
+                    <p class="project-category">Web Development</p>
+                </a>
+            </li>
+
+            <li class="project-item active" data-filter-item data-category="web development">
+                <a href="https://github.com/andy489/BJ"
+                   target="_blank">
+                    <figure class="project-img">
+                        <div class="project-item-icon-box">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <div class="project-item-zoom-box" data-zoom-btn>
+                            <i class="fas fa-search-plus"></i>
+                        </div>
+
+                        <img src="{{ url_for('static', filename='images/portfolio/_13-bj.png') }}"
+                             alt="Blackjack"
+                             loading="lazy" data-project-img>
+                    </figure>
+
+                    <h3 class="project-title">Blackjack</h3>
+                    <p class="project-category">Web Development</p>
+                </a>
+            </li>
+
+            <li class="project-item active" data-filter-item data-category="data analysis">
+                <a href="https://github.com/andy489/Python_Pro_Bootcamp/blob/main/PPB/day_081/day_081.ipynb"
+                   target="_blank">
+                    <figure class="project-img">
+                        <div class="project-item-icon-box">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <div class="project-item-zoom-box" data-zoom-btn>
+                            <i class="fas fa-search-plus"></i>
+                        </div>
+
+                        <img src="{{ url_for('static', filename='images/portfolio/_16-boston-house-prices.png') }}"
+                             alt="linear regression"
+                             loading="lazy" data-project-img>
+                    </figure>
+
+                    <h3 class="project-title">Linear Regression</h3>
+                    <p class="project-category">Data Analysis</p>
+                </a>
+            </li>
+
+            <li class="project-item active" data-filter-item data-category="applications">
+                <a href="https://github.com/andy489/Python_Pro_Bootcamp/tree/main/PPB/day_046" target="_blank">
+                    <figure class="project-img">
+                        <div class="project-item-icon-box">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <div class="project-item-zoom-box" data-zoom-btn>
+                            <i class="fas fa-search-plus"></i>
+                        </div>
+
+                        <img src="{{ url_for('static', filename='images/portfolio/_17-music-time-machine.png') }}"
+                             alt="Music Time Machine App" loading="lazy" data-project-img>
+                    </figure>
+
+                    <h3 class="project-title">Music Time Machine App</h3>
+                    <p class="project-category">Applications</p>
+                </a>
+            </li>
+
+            <li class="project-item active" data-filter-item data-category="applications">
+                <a href="https://github.com/andy489/Python_Pro_Bootcamp/tree/main/PPB/day_036" target="_blank">
+                    <figure class="project-img">
+                        <div class="project-item-icon-box">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <div class="project-item-zoom-box" data-zoom-btn>
+                            <i class="fas fa-search-plus"></i>
+                        </div>
+
+                        <img src="{{ url_for('static', filename='images/portfolio/_18-stocks-upd.png') }}"
+                             alt="Stock News App" loading="lazy" data-project-img>
+                    </figure>
+
+                    <h3 class="project-title">Stock News App</h3>
+                    <p class="project-category">Applications</p>
+                </a>
+            </li>
+
+            <li class="project-item active" data-filter-item data-category="applications">
+                <a href="https://github.com/andy489/Battleships_Online" target="_blank">
+                    <figure class="project-img">
+                        <div class="project-item-icon-box">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <div class="project-item-zoom-box" data-zoom-btn>
+                            <i class="fas fa-search-plus"></i>
+                        </div>
+
+                        <img src="{{ url_for('static', filename='images/portfolio/_05-battleships-online.png') }}"
+                             alt="Battleships Online Console Game" loading="lazy" data-project-img>
+                    </figure>
+
+                    <h3 class="project-title">Battleships Online Console Game</h3>
+                    <p class="project-category">Applications</p>
+                </a>
+            </li>
+
+            <li class="project-item active" data-filter-item data-category="web development">
+                <a href="https://github.com/andy489/Spring_Fundamentals" target="_blank">
+                    <figure class="project-img">
+                        <div class="project-item-icon-box">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <div class="project-item-zoom-box" data-zoom-btn>
+                            <i class="fas fa-search-plus"></i>
+                        </div>
+
+                        <img src="{{ url_for('static', filename='images/portfolio/_03-reseller-app.png') }}"
+                             alt="Reseller App" loading="lazy" data-project-img>
+                    </figure>
+
+                    <h3 class="project-title">Spring Fundamentals</h3>
+                    <p class="project-category">Web Development</p>
+                </a>
+            </li>
+
+            <li class="project-item active" data-filter-item data-category="math & statistics">
+                <a href="https://github.com/andy489/Configurable_Reel_Set_Generator" target="_blank">
+                    <figure class="project-img">
+                        <div class="project-item-icon-box">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <div class="project-item-zoom-box" data-zoom-btn>
+                            <i class="fas fa-search-plus"></i>
+                        </div>
+
+                        <img src="{{ url_for('static', filename='images/portfolio/_02-reel-set-gen-comb.png') }}"
+                             alt="Configurable Reel Set Generator" loading="lazy" data-project-img>
+                    </figure>
+
+                    <h3 class="project-title">Configurable Reel Set Generator</h3>
+                    <p class="project-category">Math & Statistics</p>
+                </a>
+            </li>
+
+            <li class="project-item active" data-filter-item data-category="applications">
+                <a href="https://github.com/andy489/Data_Structures_and_Algorithms/tree/master/4%20%E2%80%93%20DSA%20project"
+                   target="_blank">
+                    <figure class="project-img">
+                        <div class="project-item-icon-box">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <div class="project-item-zoom-box" data-zoom-btn>
+                            <i class="fas fa-search-plus"></i>
+                        </div>
+
+                        <img src="{{ url_for('static', filename='images/portfolio/_07-airport-connections-app.png') }}"
+                             alt="Airport Connections App" loading="lazy" data-project-img>
+                    </figure>
+
+                    <h3 class="project-title">Airport Connections</h3>
+                    <p class="project-category">Applications</p>
+                </a>
+            </li>
+
+            <li class="project-item active" data-filter-item data-category="applications">
+                <a href="https://github.com/andy489/Fast_Algorithms_in_Data_Structures/tree/main/Suffix%20Automaton"
+                   target="_blank">
+                    <figure class="project-img">
+                        <div class="project-item-icon-box">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <div class="project-item-zoom-box" data-zoom-btn>
+                            <i class="fas fa-search-plus"></i>
+                        </div>
+
+                        <img src="{{ url_for('static', filename='images/portfolio/_08-fastest-suffix-automaton.png') }}"
+                             alt="Fastest Suffix Automaton"
+                             loading="lazy" data-project-img>
+                    </figure>
+
+                    <h3 class="project-title">Fastest Suffix Automaton</h3>
+                    <p class="project-category">Applications</p>
+                </a>
+            </li>
+
+            <li class="project-item active" data-filter-item data-category="math & statistics">
+                <a href="https://github.com/andy489/Scalability_of_the_Mandelbrot_Test"
+                   target="_blank">
+                    <figure class="project-img">
+                        <div class="project-item-icon-box">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <div class="project-item-zoom-box" data-zoom-btn>
+                            <i class="fas fa-search-plus"></i>
+                        </div>
+
+                        <img src="{{ url_for('static', filename='images/portfolio/_09-mandelbrot-test.png') }}"
+                             alt="Mandelbrot Test"
+                             loading="lazy" data-project-img>
+                    </figure>
+
+                    <h3 class="project-title">Scalability of the Mandelbrot Test</h3>
+                    <p class="project-category">Math & Statistics</p>
+                </a>
+            </li>
+
+            <li class="project-item active" data-filter-item data-category="web development">
+                <a href="https://github.com/andy489/Parking_System_FMI" target="_blank">
+                    <figure class="project-img">
+                        <div class="project-item-icon-box">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <div class="project-item-zoom-box" data-zoom-btn>
+                            <i class="fas fa-search-plus"></i>
+                        </div>
+
+                        <img src="{{ url_for('static', filename='images/portfolio/_04-parking-system-fmi.png') }}"
+                             alt="Parking System FMI" loading="lazy" data-project-img>
+                    </figure>
+
+                    <h3 class="project-title">Parking System FMI</h3>
+                    <p class="project-category">Web Development</p>
+                </a>
+            </li>
+
+            <li class="project-item active" data-filter-item data-category="applications">
+                <a href="https://github.com/andy489/Linux_Shell" target="_blank">
+                    <figure class="project-img">
+                        <div class="project-item-icon-box">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <div class="project-item-zoom-box" data-zoom-btn>
+                            <i class="fas fa-search-plus"></i>
+                        </div>
+
+                        <img src="{{ url_for('static', filename='images/portfolio/_06-smart-image-editor.png') }}"
+                             alt="Smart Image Editor" loading="lazy" data-project-img>
+                    </figure>
+
+                    <h3 class="project-title">Smart Image Editor</h3>
+                    <p class="project-category">Applications</p>
+                </a>
+            </li>
+
+            <li class="project-item active" data-filter-item data-category="applications">
+                <a href="https://github.com/andy489/Python_Pro_Bootcamp/tree/main/PPB/day_024" target="_blank">
+                    <figure class="project-img">
+                        <div class="project-item-icon-box">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <div class="project-item-zoom-box" data-zoom-btn>
+                            <i class="fas fa-search-plus"></i>
+                        </div>
+
+                        <img src="{{ url_for('static', filename='images/portfolio/_19-snake-game.png') }}"
+                             alt="Snake Game" loading="lazy" data-project-img>
+                    </figure>
+
+                    <h3 class="project-title">Snake Game</h3>
+                    <p class="project-category">Applications</p>
+                </a>
+            </li>
+        </ul>
+    </section>
+</article>

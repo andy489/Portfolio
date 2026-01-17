@@ -1,0 +1,19 @@
+<nav class="navbar">
+    <ul class="navbar-list">
+        <li class="navbar-item">
+            <button class="navbar-link {% if active_page == 'about' %}active{% endif %}" data-nav-link="about">About</button>
+        </li>
+        <li class="navbar-item">
+            <button class="navbar-link {% if active_page == 'resume' %}active{% endif %}" data-nav-link="resume">Resume</button>
+        </li>
+        <li class="navbar-item">
+            <button class="navbar-link {% if active_page == 'portfolio' %}active{% endif %}" data-nav-link="portfolio">Portfolio</button>
+        </li>
+        <li class="navbar-item">
+            <button class="navbar-link {% if active_page == 'blog' %}active{% endif %}" data-nav-link="blog">Blog</button>
+        </li>
+        <li class="navbar-item">
+            <button class="navbar-link {% if active_page == 'contact' %}active{% endif %}" data-nav-link="contact">Contact</button>
+        </li>
+    </ul>
+</nav>
