@@ -43,8 +43,8 @@ class MusicPlayer {
         return [
             { title: "Sleepwalker", file: "01.mp3" },
             { title: "Keep Your Eyes Peeled", file: "02.mp3" },
-            { title: "Wavdealer - Zima", file: "03.mp3" }
-            { title: "Vision", file: "04.mp3" }
+            { title: "Wavdealer - Zima", file: "03.mp3" },
+            { title: "Vision", file: "04.mp3" },
         ];
     }
 
