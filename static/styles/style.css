@@ -110,7 +110,10 @@ main {
     display: none;
 }
 
-.sidebar.active { max-height: 405px; }
+.sidebar.active {
+    max-height: 405px;
+    overflow-y: auto;
+}
 
 .separator {
     width: 100%;
