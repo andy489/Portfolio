@@ -100,6 +100,8 @@ main {
     box-shadow: var(--shadow1);
     z-index: 1;
     padding: 15px;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .sidebar.active { max-height: 405px; }
@@ -298,6 +300,8 @@ article[data-page].active {
     opacity: 0;
     visibility: visible;
     transition: var(--transition2);
+    max-height: 500px;
+    transition: max-height var(--transition2), opacity var(--transition2);
 }
 
 .sidebar.active .sidebar-info-more {
