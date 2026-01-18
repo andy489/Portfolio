@@ -1,10 +1,8 @@
 'use strict';
 
-// Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
     console.log('=== PORTFOLIO SCRIPT INITIALIZATION ===');
 
-    // Initialize all functionality
     initializeSidebar();
     initializeTestimonials();
     initializePortfolio();
@@ -16,7 +14,6 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('=== ALL COMPONENTS INITIALIZED ===');
 });
 
-// Sidebar toggle
 function initializeSidebar() {
     const sidebar = document.querySelector("[data-sidebar]");
     const sidebarBtn = document.querySelector("[data-sidebar-btn]");
@@ -37,7 +34,6 @@ function initializeSidebar() {
     }
 }
 
-// Testimonials modal with PDF functionality - FIXED
 function initializeTestimonials() {
     const testimonialsItem = document.querySelectorAll('[data-testimonials-item]');
     const modalContainer = document.querySelector('[data-modal-container]');
@@ -71,7 +67,6 @@ function initializeTestimonials() {
                 modalDate.setAttribute('datetime', testimonialDate);
             }
 
-            // Update PDF button visibility and URL
             if (pdfButton) {
                 if (pdfUrl) {
                     pdfButton.setAttribute('data-pdf-url', pdfUrl);
@@ -99,7 +94,6 @@ function initializeTestimonials() {
     }
 }
 
-// Initialize testimonial PDF viewer - FIXED
 function initializeTestimonialPdfViewer() {
     const pdfButton = document.getElementById('testimonialPdfButton');
 
@@ -122,9 +116,7 @@ function initializeTestimonialPdfViewer() {
     });
 }
 
-// Open testimonial PDF in modal - FIXED WITH WORKING CLOSE BUTTON
 function openTestimonialPdf(pdfUrl) {
-    // Close testimonial modal first
     const modalContainer = document.querySelector('[data-modal-container]');
     const overlay = document.querySelector('[data-overlay]');
 
@@ -133,38 +125,31 @@ function openTestimonialPdf(pdfUrl) {
         overlay.classList.remove('active');
     }
 
-    // Create or get PDF modal
     let pdfModal = document.getElementById('pdfModal');
 
-    // If modal doesn't exist, create it
     if (!pdfModal) {
         createPdfModal();
         pdfModal = document.getElementById('pdfModal');
     }
 
-    // Open the PDF
     const pdfViewerFrame = document.getElementById('pdfViewerFrame');
     if (pdfViewerFrame) {
         pdfViewerFrame.src = pdfUrl + '#toolbar=0&navpanes=0&scrollbar=0';
     }
 
-    // Show the modal
     pdfModal.style.display = 'block';
     document.body.style.overflow = 'hidden';
 
-    // Add ESC key listener
     const escHandler = function(e) {
         if (e.key === 'Escape') {
             closePdfModal();
         }
     };
 
-    // Store handler for removal
     pdfModal.dataset.escHandler = 'active';
     document.addEventListener('keydown', escHandler);
 }
 
-// Create PDF modal with working close button
 function createPdfModal() {
     const pdfModal = document.createElement('div');
     pdfModal.id = 'pdfModal';
@@ -180,11 +165,9 @@ function createPdfModal() {
     `;
     document.body.appendChild(pdfModal);
 
-    // Setup close functionality
     setupPdfModalClose();
 }
 
-// Setup PDF modal close functionality
 function setupPdfModalClose() {
     const pdfModal = document.getElementById('pdfModal');
     const closePdfModal = document.querySelector('.close-pdf-modal');
@@ -197,12 +180,10 @@ function setupPdfModalClose() {
         pdfModal.style.display = 'none';
         document.body.style.overflow = 'auto';
 
-        // Clear iframe src
         if (pdfViewerFrame) {
             pdfViewerFrame.src = '';
         }
 
-        // Remove ESC listener
         if (pdfModal.dataset.escHandler === 'active') {
             document.removeEventListener('keydown', function(e) {
                 if (e.key === 'Escape') {
@@ -212,19 +193,16 @@ function setupPdfModalClose() {
         }
     };
 
-    // Close button click
     if (closePdfModal) {
         closePdfModal.addEventListener('click', closePdfModalFunc);
     }
 
-    // Background click
     pdfModal.addEventListener('click', function(e) {
         if (e.target === pdfModal) {
             closePdfModalFunc();
         }
     });
 
-    // ESC key - NEW FIXED VERSION
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape' && pdfModal.style.display === 'block') {
             closePdfModalFunc();
@@ -232,7 +210,6 @@ function setupPdfModalClose() {
     });
 }
 
-// Portfolio filtering
 function initializePortfolio() {
     const select = document.querySelector('[data-select]');
     const selectItems = document.querySelectorAll('[data-select-item]');
@@ -283,7 +260,6 @@ function initializePortfolio() {
     }
 }
 
-// Image zoom functionality
 function initializeZoomModal() {
     const zoomModal = document.getElementById('zoomModal');
     const zoomedImage = document.getElementById('zoomedImage');
@@ -353,7 +329,6 @@ function initializeZoomModal() {
     });
 }
 
-// Form validation
 function initializeFormValidation() {
     const form = document.querySelector('[data-form]');
     const formBtn = document.querySelector('[data-form-btn]');
@@ -380,9 +355,7 @@ function initializeFormValidation() {
     }
 }
 
-// Certificate modal - FIXED WITH WORKING CLOSE BUTTON
 function initializeCertModal() {
-    // Create certificate modal if it doesn't exist
     let certModal = document.querySelector('.cert-modal');
 
     if (!certModal) {
@@ -399,7 +372,6 @@ function initializeCertModal() {
         `;
         document.body.appendChild(certModal);
 
-        // Setup certificate modal close functionality
         setupCertModalClose();
     }
 
@@ -420,7 +392,6 @@ function initializeCertModal() {
     });
 }
 
-// Open certificate PDF
 function openCertPdf(pdfUrl) {
     const certModal = document.querySelector('.cert-modal');
     const certPdfFrame = document.getElementById('certPdfFrame');
@@ -435,7 +406,6 @@ function openCertPdf(pdfUrl) {
     document.body.style.overflow = 'hidden';
 }
 
-// Setup certificate modal close functionality
 function setupCertModalClose() {
     const certModal = document.querySelector('.cert-modal');
     const closeCertModal = certModal ? certModal.querySelector('.close-cert-modal') : null;
@@ -443,30 +413,25 @@ function setupCertModalClose() {
 
     if (!certModal) return;
 
-    // Close function
     const closeCertModalFunc = function() {
         certModal.style.display = 'none';
         document.body.style.overflow = 'auto';
 
-        // Clear iframe src
         if (certPdfFrame) {
             certPdfFrame.src = '';
         }
     };
 
-    // Close button click
     if (closeCertModal) {
         closeCertModal.addEventListener('click', closeCertModalFunc);
     }
 
-    // Background click
     certModal.addEventListener('click', function(e) {
         if (e.target === certModal) {
             closeCertModalFunc();
         }
     });
 
-    // ESC key
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape' && certModal.style.display === 'block') {
             closeCertModalFunc();
@@ -474,15 +439,12 @@ function setupCertModalClose() {
     });
 }
 
-// Also make sure to initialize the PDF modal close when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
-    // Check if PDF modal exists in HTML and setup close functionality
     const existingPdfModal = document.getElementById('pdfModal');
     if (existingPdfModal) {
         setupPdfModalClose();
     }
 
-    // Check if cert modal exists in HTML and setup close functionality
     const existingCertModal = document.querySelector('.cert-modal');
     if (existingCertModal) {
         setupCertModalClose();

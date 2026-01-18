@@ -4,6 +4,8 @@ import os
 from dotenv import load_dotenv
 import resend
 
+from keep_alive import KeepAliveService
+
 load_dotenv()
 app = Flask(__name__, static_folder='static',
             static_url_path='/static')
@@ -12,6 +14,28 @@ app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'fallback-secret-key')
 
 resend.api_key = os.getenv('RESEND_API_KEY')
 
+# ===== Keep-Alive Initialization =====
+RENDER_URL = os.getenv('RENDER_URL', 'https://andy-tn7s.onrender.com')
+# Initialize and start the keep-alive service
+keep_alive = KeepAliveService(url=RENDER_URL)
+
+# Start the service when Flask app starts
+keep_alive_started = False
+
+def start_keep_alive_once():
+    """Start keep-alive service once (Flask 2.3+ compatible)"""
+    global keep_alive_started
+    if not keep_alive_started:
+        keep_alive.start()
+        keep_alive_started = True
+        print(f"[App] Keep-alive service initialized for {RENDER_URL}")
+
+# Register with Flask app context
+@app.before_request
+def before_request_handler():
+    """Start keep-alive on first request"""
+    start_keep_alive_once()
+# ===== End Keep-Alive Configuration =====
 
 @app.route('/')
 def home():
@@ -60,7 +84,6 @@ def contact():
                                    })
 
         try:
-            # Prepare email message using Resend API
             html_content = f"""
             <!DOCTYPE html>
             <html>
@@ -103,7 +126,6 @@ def contact():
                 "reply_to": email
             }
 
-            # Send the email
             email_response = resend.Emails.send(params)
 
             print(f"Contact Form Submission:")
@@ -150,4 +172,7 @@ def contact():
 
 
 if __name__ == "__main__":
-    app.run(debug=False)
+    # Start keep-alive immediately when running directly
+    start_keep_alive_once()
+
+    app.run(debug=False, host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
