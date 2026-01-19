@@ -144,7 +144,8 @@ function openTestimonialPdf(pdfUrl) {
 
     const pdfViewerFrame = document.getElementById('pdfViewerFrame');
     if (pdfViewerFrame) {
-        pdfViewerFrame.src = pdfUrl + '#toolbar=0&navpanes=0&scrollbar=0';
+        // Remove restrictive parameters to show entire PDF
+        pdfViewerFrame.src = pdfUrl + '#view=FitH&scrollbar=1&toolbar=1&navpanes=1';
     }
 
     pdfModal.style.display = 'block';
@@ -156,8 +157,10 @@ function openTestimonialPdf(pdfUrl) {
         }
     };
 
-    pdfModal.dataset.escHandler = 'active';
     document.addEventListener('keydown', escHandler);
+
+    // Store the handler reference for cleanup
+    pdfModal.escHandler = escHandler;
 }
 
 function createPdfModal() {
@@ -193,11 +196,10 @@ function setupPdfModalClose() {
         }
 
         // Remove escape key handler
-        document.removeEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                closePdfModalFunc();
-            }
-        });
+        if (pdfModal.escHandler) {
+            document.removeEventListener('keydown', pdfModal.escHandler);
+            delete pdfModal.escHandler;
+        }
     };
 
     if (closePdfModal) {
@@ -513,7 +515,8 @@ function openCertPdf(pdfUrl) {
     if (!certModal) return;
 
     if (certPdfFrame) {
-        certPdfFrame.src = pdfUrl + '#toolbar=0&navpanes=0&scrollbar=0';
+        // Use parameters that show the full PDF with navigation
+        certPdfFrame.src = pdfUrl + '#view=FitH&scrollbar=1&toolbar=1&navpanes=1';
     }
 
     certModal.style.display = 'block';
