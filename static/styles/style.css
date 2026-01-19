@@ -34,7 +34,7 @@
     --fs1: 24px; --fs2: 18px; --fs3: 17px; --fs4: 16px;
     --fs5: 15px; --fs6: 14px; --fs7: 13px; --fs8: 12px;
 
-    --fw300: 300; --fw400: 400; --fw500: 500; --fw600: 600;
+    --fw300: 300; --fw400: 400; --fw500: 500; --fw600: 600; --fw700: 700;
 
     --shadow1: -4px 8px 24px hsla(0, 0%, 0%, .25);
     --shadow2: 0px 16px 30px hsla(0, 0%, 0%, .25);
@@ -447,10 +447,27 @@ article[data-page].active {
     font-weight: bold;
 }
 
-.org {
-    font-weight: 700;
-    color: var(--text-gradient-yellow);
+.com {
+    color: var(--vegas-gold);
     display: inline;
+}
+
+.fw700 {
+    font-weight: 700;
+}
+
+.proj-info {
+    color: var(--orange-yellow-crayola);
+    margin-right: 4px;
+}
+
+.proj-desc {
+    color: #D6D6D6;
+    display: inline;
+}
+
+.proj-desc-wrapper {
+    margin-top: 6px;
 }
 
 /* ==========================================================================
@@ -749,12 +766,6 @@ article[data-page].active {
 .timeline-list {
     font-size: var(--fs6);
     margin-left: 45px;
-}
-
-.timeline-list span {
-    color: var(--vegas-gold);
-    font-weight: var(--fw400);
-    line-height: 1.6;
 }
 
 .timeline-item { position: relative; }
@@ -1520,16 +1531,30 @@ textarea.form-input {
 }
 
 .tech-tag {
-    background: linear-gradient(to right, var(--orange-yellow-crayola), var(--vegas-gold));
-    color: var(--smoky-black);
-    padding: 4px 10px;
-    border-radius: 16px;
+    background:
+        linear-gradient(145deg,
+            hsl(45, 100%, 75%) 0%,
+            var(--orange-yellow-crayola) 30%,
+            hsl(45, 100%, 65%) 70%,
+            hsl(45, 100%, 75%) 100%);
+    color: #000000;
+    padding: 3px 6px;
+    border-radius: 6px;
     font-size: var(--fs8);
     font-weight: var(--fw600);
     text-transform: uppercase;
-    letter-spacing: 0.5px;
-    box-shadow: 0 2px 8px rgba(239, 207, 108, 0.2);
+    letter-spacing: 0.4px;
+    box-shadow:
+        0 3px 10px rgba(239, 207, 108, 0.3),
+        inset 0 1px 3px rgba(255, 255, 255, 0.6),
+        inset 0 -1px 3px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.3);
     transition: all var(--transition1);
+
+    color: black;
+    font-weight: var(--fw400);
+    line-height: 1.2;
 }
 
 .tech-tag:hover {
@@ -1545,10 +1570,10 @@ textarea.form-input {
 
 .styled-bullet-list li {
     position: relative;
-    padding-left: 28px;
+    padding-left: 34px;
     margin-bottom: 12px;
     line-height: 1.6;
-    color: #D6D6D6;
+    color: var(--light-gray);
 }
 
 .styled-bullet-list li::before {
@@ -1559,10 +1584,15 @@ textarea.form-input {
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--orange-yellow-crayola), var(--vegas-gold)) border-box;
-    -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
+    background: transparent;
+    border: 2px solid var(--orange-yellow-crayola);
+    box-shadow: 0 0 4px rgba(239, 207, 108, 0.6);
+}
+
+.styled-bullet-list li:hover::before {
+    border-color: #ffd93d;
+    box-shadow: 0 0 6px rgba(255, 217, 61, 0.8);
+    transform: scale(1.1);
 }
 
 /* ==========================================================================
@@ -1876,6 +1906,13 @@ textarea.form-input {
     .cert-item { min-width: calc(33.33% - 10px); }
     .project-img, .blog-banner-box { height: auto; }
     .avatar-box img { width: 80px; }
+}
+
+@media (max-width: 450px) {
+    .sidebar.active {
+        max-height: 440px;
+        overflow-y: auto;
+    }
 }
 
 @media (min-width: 580px) {
@@ -2428,7 +2465,7 @@ article::-webkit-scrollbar {
 }
 
 .sidebar.active {
-    max-height: 405px;
+    max-height: 505px;
     overflow-y: auto;
 }
 
@@ -2761,12 +2798,6 @@ article[data-page].active {
     font-weight: bold;
 }
 
-.org {
-    font-weight: 700;
-    color: var(--text-gradient-yellow);
-    display: inline;
-}
-
 /* ==========================================================================
    10. SERVICES
    ========================================================================== */
@@ -3063,12 +3094,6 @@ article[data-page].active {
 .timeline-list {
     font-size: var(--fs6);
     margin-left: 45px;
-}
-
-.timeline-list span {
-    color: var(--vegas-gold);
-    font-weight: var(--fw400);
-    line-height: 1.6;
 }
 
 .timeline-item { position: relative; }
@@ -3825,7 +3850,6 @@ textarea.form-input {
 /* ==========================================================================
    22. TECH STACK & BULLET LIST
    ========================================================================== */
-
 .tech-stack {
     margin-top: 10px;
     display: flex;
@@ -3870,14 +3894,19 @@ textarea.form-input {
     position: absolute;
     left: 0;
     top: 10px;
-    width: 10px;
-    height: 10px;
+    width: 7px;
+    height: 7px;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--orange-yellow-crayola), var(--vegas-gold)) border-box;
-    -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
+    background: var(--orange-yellow-crayola);
+    box-shadow: 0 0 0 2px rgba(239, 207, 108, 0.3);
 }
+
+.styled-bullet-list li:hover::before {
+    background: var(--vegas-gold);
+    transform: scale(1.2);
+    transition: all var(--transition1);
+}
+
 
 /* ==========================================================================
    23. MUSIC PLAYER
@@ -4632,8 +4661,6 @@ textarea.form-input {
 
     .avatar-box img {
         width: 180px;
-    }
-}
     }
 
     .contact-info :is(.contact-link, time, address) {

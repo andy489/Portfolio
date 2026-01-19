@@ -26,16 +26,6 @@ class ContactForm(FlaskForm):
         "autocomplete": "email"
     })
 
-    # CKEditor field for rich text editing
-    message = CKEditorField('Message', validators=[
-        DataRequired(message='Message is required'),
-        Length(min=10, max=5000, message='Message must be between 10 and 5000 characters')
-    ], render_kw={
-        "class": "form-input",
-        "placeholder": "Type your message here...",
-        "rows": 6
-    })
-
     submit = SubmitField('Send Message', render_kw={
         "class": "form-btn",
         "data-form-btn": ""
