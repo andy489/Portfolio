@@ -1362,7 +1362,7 @@ textarea.form-input {
 }
 
 /* ==========================================================================
-   20. ZOOM MODALS & PDF MODALS - FIXED
+   20. ZOOM MODALS & PDF MODALS - FIXED FOR iOS
    ========================================================================== */
 
 .zoom-modal,
@@ -1378,6 +1378,7 @@ textarea.form-input {
     background-color: rgba(0, 0, 0, 0.95);
     animation: fadeIn 0.3s ease;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 .zoom-modal-content,
@@ -1398,6 +1399,37 @@ textarea.form-input {
     background: var(--eerie-black2);
     padding: 20px;
     border: 1px solid var(--jet);
+}
+
+/* iOS specific fixes */
+@supports (-webkit-touch-callout: none) {
+    .cert-pdf-container,
+    .pdf-pdf-container {
+        height: 80vh;
+        min-height: 500px;
+        -webkit-overflow-scrolling: touch;
+        overflow-y: auto;
+    }
+
+    .cert-pdf-container iframe,
+    .pdf-pdf-container iframe {
+        height: 100%;
+        min-height: 500px;
+    }
+
+    .pdf-modal-content {
+        top: 5%;
+        transform: none;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+
+    .cert-modal-content {
+        top: 5%;
+        transform: none;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
 }
 
 #zoomedImage {
@@ -1423,6 +1455,26 @@ textarea.form-input {
     height: 100%;
     border: none;
     border-radius: 8px;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Download fallback styling */
+.pdf-fallback-message {
+    margin-top: 15px;
+    padding: 15px;
+    background: var(--jet);
+    border-radius: 8px;
+    border: 1px solid var(--orange-yellow-crayola);
+}
+
+.pdf-fallback-message a {
+    color: var(--orange-yellow-crayola);
+    text-decoration: underline;
+    font-weight: var(--fw600);
+}
+
+.pdf-fallback-message a:hover {
+    color: var(--vegas-gold);
 }
 
 .close-zoom-modal,
@@ -1463,6 +1515,48 @@ textarea.form-input {
 @keyframes zoomIn {
     from { transform: translateY(-50%) scale(0.8); }
     to { transform: translateY(-50%) scale(1); }
+}
+
+/* Mobile-specific fixes */
+@media (max-width: 768px) {
+    .cert-pdf-container,
+    .pdf-pdf-container {
+        height: 70vh;
+        min-height: 400px;
+    }
+
+    .close-zoom-modal,
+    .close-cert-modal,
+    .close-pdf-modal {
+        top: 10px;
+        right: 15px;
+        font-size: 30px;
+        width: 35px;
+        height: 35px;
+    }
+
+    .zoom-modal-content,
+    .cert-modal-content,
+    .pdf-modal-content {
+        width: 98%;
+        padding: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+}
+
+/* For very small screens */
+@media (max-width: 480px) {
+    .cert-pdf-container,
+    .pdf-pdf-container {
+        height: 60vh;
+        min-height: 300px;
+    }
+
+    .pdf-fallback-message {
+        font-size: var(--fs7);
+        padding: 10px;
+    }
 }
 
 /* ==========================================================================

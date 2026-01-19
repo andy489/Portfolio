@@ -23,6 +23,28 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('=== ALL COMPONENTS INITIALIZED ===');
 });
 
+// Detect iOS
+function isIOS() {
+    return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+}
+
+// Detect Safari
+function isSafari() {
+    return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+}
+
+// Get PDF viewer URL - handles iOS Safari specially
+function getPdfViewerUrl(pdfUrl) {
+    // For iOS Safari, use Google Docs Viewer for reliable display
+    if (isIOS() || isSafari()) {
+        // Use Google Docs Viewer as a fallback for Safari/iOS
+        return 'https://docs.google.com/viewer?url=' + encodeURIComponent(pdfUrl) + '&embedded=true&hl=en';
+    }
+
+    // For other browsers, use direct PDF with proper parameters
+    return pdfUrl + '#view=FitH&scrollbar=1&toolbar=1&navpanes=1';
+}
+
 function initializeSidebar() {
     const sidebar = document.querySelector("[data-sidebar]");
     const sidebarBtn = document.querySelector("[data-sidebar-btn]");
@@ -144,8 +166,12 @@ function openTestimonialPdf(pdfUrl) {
 
     const pdfViewerFrame = document.getElementById('pdfViewerFrame');
     if (pdfViewerFrame) {
-        // Remove restrictive parameters to show entire PDF
-        pdfViewerFrame.src = pdfUrl + '#view=FitH&scrollbar=1&toolbar=1&navpanes=1';
+        // Use the appropriate PDF viewer URL based on device/browser
+        const viewerUrl = getPdfViewerUrl(pdfUrl);
+        pdfViewerFrame.src = viewerUrl;
+
+        console.log('Opening PDF with URL:', viewerUrl);
+        console.log('Device detection - iOS:', isIOS(), 'Safari:', isSafari());
     }
 
     pdfModal.style.display = 'block';
@@ -172,11 +198,27 @@ function createPdfModal() {
         <span class="close-pdf-modal">&times;</span>
         <div class="pdf-modal-content">
             <div class="pdf-pdf-container">
-                <iframe id="pdfViewerFrame" width="100%" height="100%" frameborder="0"></iframe>
+                <iframe id="pdfViewerFrame" width="100%" height="100%" frameborder="0"
+                        allow="autoplay" style="border: none;"></iframe>
+            </div>
+            <div class="pdf-fallback-message" style="display: none; text-align: center; padding: 20px; color: var(--light-gray);">
+                <p>If the PDF doesn't display properly, you can <a href="#" class="pdf-download-link" style="color: var(--orange-yellow-crayola);">download it here</a>.</p>
             </div>
         </div>
     `;
     document.body.appendChild(pdfModal);
+
+    // Add download link functionality
+    const downloadLink = pdfModal.querySelector('.pdf-download-link');
+    if (downloadLink) {
+        downloadLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            const iframe = document.getElementById('pdfViewerFrame');
+            if (iframe && iframe.src) {
+                window.open(iframe.src.replace('/viewer?url=', '').split('&embedded')[0], '_blank');
+            }
+        });
+    }
 }
 
 function setupPdfModalClose() {
@@ -482,13 +524,29 @@ function initializeCertModal() {
             <span class="close-cert-modal">&times;</span>
             <div class="cert-modal-content">
                 <div class="cert-pdf-container">
-                    <iframe id="certPdfFrame" width="100%" height="100%" frameborder="0"></iframe>
+                    <iframe id="certPdfFrame" width="100%" height="100%" frameborder="0"
+                            allow="autoplay" style="border: none;"></iframe>
+                </div>
+                <div class="pdf-fallback-message" style="display: none; text-align: center; padding: 20px; color: var(--light-gray);">
+                    <p>If the PDF doesn't display properly, you can <a href="#" class="cert-download-link" style="color: var(--orange-yellow-crayola);">download it here</a>.</p>
                 </div>
             </div>
         `;
         document.body.appendChild(certModal);
 
         setupCertModalClose();
+
+        // Add download link functionality
+        const downloadLink = certModal.querySelector('.cert-download-link');
+        if (downloadLink) {
+            downloadLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                const iframe = document.getElementById('certPdfFrame');
+                if (iframe && iframe.src) {
+                    window.open(iframe.src.replace('/viewer?url=', '').split('&embedded')[0], '_blank');
+                }
+            });
+        }
     }
 
     const certLinks = document.querySelectorAll('.cert-link');
@@ -515,8 +573,11 @@ function openCertPdf(pdfUrl) {
     if (!certModal) return;
 
     if (certPdfFrame) {
-        // Use parameters that show the full PDF with navigation
-        certPdfFrame.src = pdfUrl + '#view=FitH&scrollbar=1&toolbar=1&navpanes=1';
+        // Use the appropriate PDF viewer URL based on device/browser
+        const viewerUrl = getPdfViewerUrl(pdfUrl);
+        certPdfFrame.src = viewerUrl;
+
+        console.log('Opening Certificate PDF with URL:', viewerUrl);
     }
 
     certModal.style.display = 'block';
