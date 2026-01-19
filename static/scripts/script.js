@@ -35,13 +35,6 @@ function isSafari() {
 
 // Get PDF viewer URL - handles iOS Safari specially
 function getPdfViewerUrl(pdfUrl) {
-    // For iOS Safari, use Google Docs Viewer for reliable display
-    if (isIOS() || isSafari()) {
-        // Use Google Docs Viewer as a fallback for Safari/iOS
-        return 'https://docs.google.com/viewer?url=' + encodeURIComponent(pdfUrl) + '&embedded=true&hl=en';
-    }
-
-    // For other browsers, use direct PDF with proper parameters
     return pdfUrl + '#view=FitH&scrollbar=1&toolbar=1&navpanes=1';
 }
 
@@ -128,71 +121,17 @@ function initializeTestimonials() {
 function initializeTestimonialPdfViewer() {
     const pdfButton = document.getElementById('testimonialPdfButton');
 
-    if (!pdfButton) {
-        console.error('PDF button not found in DOM');
-        return;
-    }
+    if (!pdfButton) return;
 
     pdfButton.addEventListener('click', function(e) {
         e.preventDefault();
         e.stopPropagation();
 
         const pdfUrl = this.getAttribute('data-pdf-url');
-
         if (pdfUrl) {
-            openTestimonialPdf(pdfUrl);
-        } else {
-            console.error('No PDF URL found on button');
+            openPdf(pdfUrl, true); // true = coming from testimonial modal
         }
     });
-}
-
-function openTestimonialPdf(pdfUrl) {
-    const modalContainer = document.querySelector('[data-modal-container]');
-    const overlay = document.querySelector('[data-overlay]');
-
-    if (modalContainer && modalContainer.classList.contains('active')) {
-        modalContainer.classList.remove('active');
-        overlay.classList.remove('active');
-    }
-
-    let pdfModal = document.getElementById('pdfModal');
-
-    if (!pdfModal) {
-        createPdfModal();
-        pdfModal = document.getElementById('pdfModal');
-        setupPdfModalClose(); // Set up close handlers after creating
-    }
-
-    const pdfViewerFrame = document.getElementById('pdfViewerFrame');
-
-    const isIOSDevice = isIOS();
-    const isSafariBrowser = isSafari();
-
-    // ALWAYS use Google Docs Viewer for iOS/Safari
-    if (isIOSDevice || isSafariBrowser) {
-        const googleViewerUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(pdfUrl)}&embedded=true&hl=en`;
-        pdfViewerFrame.src = googleViewerUrl;
-        console.log('iOS/Safari detected, using Google Docs Viewer.');
-    } else {
-        // For non-iOS/Chrome, you can try the direct URL with parameters
-        const directUrl = pdfUrl + '#view=FitH&toolbar=1&navpanes=1';
-        pdfViewerFrame.src = directUrl;
-    }
-
-    pdfModal.style.display = 'block';
-    document.body.style.overflow = 'hidden';
-
-    const escHandler = function(e) {
-        if (e.key === 'Escape') {
-            closePdfModal();
-        }
-    };
-
-    document.addEventListener('keydown', escHandler);
-
-    // Store the handler reference for cleanup
-    pdfModal.escHandler = escHandler;
 }
 
 function createPdfModal() {
@@ -558,36 +497,61 @@ function initializeCertModal() {
     const certLinks = document.querySelectorAll('.cert-link');
 
     certLinks.forEach(certLink => {
-        certLink.addEventListener('click', function (e) {
-            e.preventDefault();
+    certLink.addEventListener('click', function (e) {
+        e.preventDefault();
+        const pdfUrl = this.getAttribute('href');
 
-            const pdfUrl = this.getAttribute('href');
-
-            if (pdfUrl && pdfUrl.toLowerCase().endsWith('.pdf')) {
-                openCertPdf(pdfUrl);
-            } else {
-                window.open(pdfUrl, '_blank');
-            }
-        });
+        if (pdfUrl && pdfUrl.toLowerCase().endsWith('.pdf')) {
+            openPdf(pdfUrl); // ← use the new shared function
+        } else {
+            window.open(pdfUrl, '_blank');
+        }
     });
+});
 }
 
-function openCertPdf(pdfUrl) {
-    const certModal = document.querySelector('.cert-modal');
-    const certPdfFrame = document.getElementById('certPdfFrame');
-
-    if (!certModal) return;
-
-    if (certPdfFrame) {
-        // Use the appropriate PDF viewer URL based on device/browser
-        const viewerUrl = getPdfViewerUrl(pdfUrl);
-        certPdfFrame.src = viewerUrl;
-
-        console.log('Opening Certificate PDF with URL:', viewerUrl);
+function openPdf(pdfUrl, isFromTestimonial = false) {
+    // If it's iOS or Safari → open in new tab (best experience on mobile)
+    if (isIOS() || isSafari()) {
+        window.open(pdfUrl, '_blank');
+        return; // ← important: stop here, don't open modal
     }
 
-    certModal.style.display = 'block';
+    // For all other browsers → open your modal
+    let pdfModal = document.getElementById('pdfModal');
+    if (!pdfModal) {
+        createPdfModal();
+        pdfModal = document.getElementById('pdfModal');
+        setupPdfModalClose();
+    }
+
+    const pdfViewerFrame = document.getElementById('pdfViewerFrame');
+
+    // Use direct PDF with view parameters (works great on Chrome, Firefox, Edge...)
+    const directUrl = pdfUrl + '#view=FitH&scrollbar=1&toolbar=1&navpanes=1';
+    pdfViewerFrame.src = directUrl;
+
+    pdfModal.style.display = 'block';
     document.body.style.overflow = 'hidden';
+
+    // Close testimonial modal if it was open (for testimonial PDFs)
+    if (isFromTestimonial) {
+        const modalContainer = document.querySelector('[data-modal-container]');
+        const overlay = document.querySelector('[data-overlay]');
+        if (modalContainer && modalContainer.classList.contains('active')) {
+            modalContainer.classList.remove('active');
+            overlay.classList.remove('active');
+        }
+    }
+
+    // Escape key to close
+    const escHandler = function(e) {
+        if (e.key === 'Escape') {
+            closePdfModal();
+        }
+    };
+    document.addEventListener('keydown', escHandler);
+    pdfModal.escHandler = escHandler;
 }
 
 function setupCertModalClose() {
