@@ -1,4 +1,4 @@
-from flask import Flask, request, flash, redirect, render_template, url_for
+from flask import Flask, request, redirect, render_template, url_for
 import os
 from dotenv import load_dotenv
 
@@ -15,12 +15,10 @@ class PortfolioApp:
         self.app = Flask(__name__, static_folder='static', static_url_path='/static')
         self.app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'fallback-secret-key')
 
-        # Initialize services
         self.form_handler = FormHandler()
         self.keep_alive = None
         self.keep_alive_started = False
 
-        # Setup routes
         self._setup_routes()
         self._setup_middleware()
 
@@ -77,13 +75,12 @@ class PortfolioApp:
 
     def run(self, debug: bool = True, host: str = '0.0.0.0', port: int = 5000):
         """Run the Flask application"""
-        if not debug:  # Only start keep-alive in production
+        if not debug:
             self._start_keep_alive_once()
 
         self.app.run(debug=debug, host=host, port=port)
 
 
-# Factory function to create app instance
 def create_app():
     """Application factory"""
     return PortfolioApp().app
@@ -91,6 +88,6 @@ def create_app():
 
 if __name__ == "__main__":
     portfolio_app = PortfolioApp()
-
-    # portfolio_app.run(debug=True)
     portfolio_app.run(debug=False, port=int(os.environ.get('PORT', 5000)))
+
+app = create_app()
