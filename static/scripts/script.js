@@ -11,6 +11,15 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeCertModal();
     initializeTestimonialPdfViewer();
 
+    // Set up existing modals if they exist
+    if (document.getElementById('pdfModal')) {
+        setupPdfModalClose();
+    }
+
+    if (document.querySelector('.cert-modal')) {
+        setupCertModalClose();
+    }
+
     console.log('=== ALL COMPONENTS INITIALIZED ===');
 });
 
@@ -130,6 +139,7 @@ function openTestimonialPdf(pdfUrl) {
     if (!pdfModal) {
         createPdfModal();
         pdfModal = document.getElementById('pdfModal');
+        setupPdfModalClose(); // Set up close handlers after creating
     }
 
     const pdfViewerFrame = document.getElementById('pdfViewerFrame');
@@ -164,13 +174,11 @@ function createPdfModal() {
         </div>
     `;
     document.body.appendChild(pdfModal);
-
-    setupPdfModalClose();
 }
 
 function setupPdfModalClose() {
     const pdfModal = document.getElementById('pdfModal');
-    const closePdfModal = document.querySelector('.close-pdf-modal');
+    const closePdfModal = pdfModal ? pdfModal.querySelector('.close-pdf-modal') : null;
     const pdfViewerFrame = document.getElementById('pdfViewerFrame');
 
     if (!pdfModal) return;
@@ -184,13 +192,12 @@ function setupPdfModalClose() {
             pdfViewerFrame.src = '';
         }
 
-        if (pdfModal.dataset.escHandler === 'active') {
-            document.removeEventListener('keydown', function(e) {
-                if (e.key === 'Escape') {
-                    closePdfModalFunc();
-                }
-            });
-        }
+        // Remove escape key handler
+        document.removeEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closePdfModalFunc();
+            }
+        });
     };
 
     if (closePdfModal) {
@@ -203,6 +210,7 @@ function setupPdfModalClose() {
         }
     });
 
+    // Add escape key listener
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape' && pdfModal.style.display === 'block') {
             closePdfModalFunc();
@@ -544,15 +552,3 @@ function setupCertModalClose() {
         }
     });
 }
-
-document.addEventListener('DOMContentLoaded', function() {
-    const existingPdfModal = document.getElementById('pdfModal');
-    if (existingPdfModal) {
-        setupPdfModalClose();
-    }
-
-    const existingCertModal = document.querySelector('.cert-modal');
-    if (existingCertModal) {
-        setupCertModalClose();
-    }
-});
