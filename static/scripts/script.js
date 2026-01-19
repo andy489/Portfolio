@@ -165,13 +165,19 @@ function openTestimonialPdf(pdfUrl) {
     }
 
     const pdfViewerFrame = document.getElementById('pdfViewerFrame');
-    if (pdfViewerFrame) {
-        // Use the appropriate PDF viewer URL based on device/browser
-        const viewerUrl = getPdfViewerUrl(pdfUrl);
-        pdfViewerFrame.src = viewerUrl;
 
-        console.log('Opening PDF with URL:', viewerUrl);
-        console.log('Device detection - iOS:', isIOS(), 'Safari:', isSafari());
+    const isIOSDevice = isIOS();
+    const isSafariBrowser = isSafari();
+
+    // ALWAYS use Google Docs Viewer for iOS/Safari
+    if (isIOSDevice || isSafariBrowser) {
+        const googleViewerUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(pdfUrl)}&embedded=true&hl=en`;
+        pdfViewerFrame.src = googleViewerUrl;
+        console.log('iOS/Safari detected, using Google Docs Viewer.');
+    } else {
+        // For non-iOS/Chrome, you can try the direct URL with parameters
+        const directUrl = pdfUrl + '#view=FitH&toolbar=1&navpanes=1';
+        pdfViewerFrame.src = directUrl;
     }
 
     pdfModal.style.display = 'block';

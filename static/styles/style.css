@@ -1447,6 +1447,12 @@ textarea.form-input {
     min-height: 500px;
     border-radius: 8px;
     overflow: hidden;
+
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior: contain !important;
+    overflow-y: auto !important;
+    /* Explicitly enable touch actions */
+    touch-action: pan-y pinch-zoom !important;
 }
 
 .cert-pdf-container iframe,
@@ -1455,7 +1461,25 @@ textarea.form-input {
     height: 100%;
     border: none;
     border-radius: 8px;
+
+    /* Critical for iOS scrolling */
     -webkit-overflow-scrolling: touch;
+    /* Allows the iframe to capture touch events */
+    pointer-events: auto;
+}
+
+.modal-close-btn,
+.pdf-button,
+.cert-icon-box,
+[data-zoom-btn] {
+    cursor: pointer !important;
+}
+
+.testimonials-modal,
+.cert-modal-content,
+.pdf-modal-content {
+    -webkit-overflow-scrolling: touch;
+    overflow-y: auto;
 }
 
 /* Download fallback styling */
