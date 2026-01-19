@@ -215,18 +215,88 @@ function initializePortfolio() {
     const selectItems = document.querySelectorAll('[data-select-item]');
     const selectValue = document.querySelector('[data-select-value]');
     const filterBtn = document.querySelectorAll('[data-filter-btn]');
+    const selectIcon = document.querySelector('.select-icon i');
 
     if (!select) return;
 
-    select.addEventListener('click', function () {
+    // Toggle dropdown on click
+    select.addEventListener('click', function (e) {
+        e.stopPropagation();
         this.classList.toggle("active");
+
+        // Change chevron icon
+        if (selectIcon) {
+            if (this.classList.contains("active")) {
+                selectIcon.classList.remove("fa-chevron-down");
+                selectIcon.classList.add("fa-chevron-up");
+                selectIcon.style.color = "var(--orange-yellow-crayola)";
+            } else {
+                selectIcon.classList.remove("fa-chevron-up");
+                selectIcon.classList.add("fa-chevron-down");
+                // Keep chevron yellow if an item is selected
+                const selectedItem = document.querySelector('.select-item button.active');
+                if (selectedItem && selectedItem.textContent !== "All") {
+                    selectIcon.style.color = "var(--orange-yellow-crayola)";
+                } else {
+                    selectIcon.style.color = "";
+                }
+            }
+        }
     });
 
-    for(let i = 0; i < selectItems.length; i++) {
-        selectItems[i].addEventListener('click', function() {
-            let selectedValue = this.innerText.toLowerCase();
-            selectValue.innerText = this.innerText;
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function (e) {
+        if (!select.contains(e.target)) {
             select.classList.remove("active");
+            if (selectIcon) {
+                selectIcon.classList.remove("fa-chevron-up");
+                selectIcon.classList.add("fa-chevron-down");
+
+                // Keep chevron yellow if an item is selected
+                const selectedItem = document.querySelector('.select-item button.active');
+                if (selectedItem && selectedItem.textContent !== "All") {
+                    selectIcon.style.color = "var(--orange-yellow-crayola)";
+                } else {
+                    selectIcon.style.color = "";
+                }
+            }
+        }
+    });
+
+    // Handle item selection
+    for(let i = 0; i < selectItems.length; i++) {
+        selectItems[i].addEventListener('click', function(e) {
+            e.stopPropagation();
+
+            let selectedValue = this.innerText.toLowerCase();
+            let displayValue = this.innerText;
+
+            // Update the selected value display
+            if (selectValue) {
+                selectValue.textContent = displayValue;
+            }
+
+            // Remove active class from all items
+            selectItems.forEach(item => {
+                item.classList.remove('active');
+            });
+
+            // Add active class to clicked item
+            this.classList.add('active');
+
+            // Make chevron yellow when an item is selected
+            if (selectIcon) {
+                selectIcon.style.color = "var(--orange-yellow-crayola)";
+            }
+
+            // Close dropdown
+            select.classList.remove("active");
+            if (selectIcon) {
+                selectIcon.classList.remove("fa-chevron-up");
+                selectIcon.classList.add("fa-chevron-down");
+            }
+
+            // Filter the portfolio items
             filterFunc(selectedValue);
         });
     }
@@ -235,9 +305,9 @@ function initializePortfolio() {
 
     const filterFunc = function (selectedValue) {
         for(let i = 0; i < filterItems.length; i++) {
-            if(selectedValue == "all") {
+            if(selectedValue === "all") {
                 filterItems[i].classList.add('active');
-            } else if (selectedValue == filterItems[i].dataset.category) {
+            } else if (selectedValue === filterItems[i].dataset.category) {
                 filterItems[i].classList.add('active');
             } else {
                 filterItems[i].classList.remove('active');
@@ -245,19 +315,55 @@ function initializePortfolio() {
         }
     }
 
+    // Initialize desktop filter buttons
     let lastClickedBtn = filterBtn[0];
 
     for (let i = 0; i < filterBtn.length; i++) {
         filterBtn[i].addEventListener('click', function() {
             let selectedValue = this.innerText.toLowerCase();
-            selectValue.innerText = this.innerText;
+
+            // Update mobile dropdown value
+            if (selectValue) {
+                selectValue.textContent = this.innerText;
+            }
+
+            // Update mobile dropdown active item
+            selectItems.forEach((item, index) => {
+                if (item.textContent.toLowerCase() === selectedValue) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+
+            // Make chevron yellow
+            if (selectIcon) {
+                selectIcon.style.color = "var(--orange-yellow-crayola)";
+            }
+
             filterFunc(selectedValue);
 
+            // Update desktop filter buttons
             lastClickedBtn.classList.remove('active');
             this.classList.add('active');
             lastClickedBtn = this;
         });
     }
+
+    // Initialize active state for chevron
+    function updateChevronColor() {
+        if (selectIcon) {
+            const activeItem = document.querySelector('.select-item button.active');
+            if (activeItem && activeItem.textContent !== "All") {
+                selectIcon.style.color = "var(--orange-yellow-crayola)";
+            } else {
+                selectIcon.style.color = "";
+            }
+        }
+    }
+
+    // Check initial state
+    updateChevronColor();
 }
 
 function initializeZoomModal() {

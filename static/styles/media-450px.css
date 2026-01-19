@@ -1,9 +1,0 @@
-@media (min-width: 450px) {
-    .cert-item { min-width: calc(33.33% - 10px); }
-
-    .project-img, .blog-banner-box { height: auto; }
-
-    .avatar-box img {
-        width: 70px;
-    }
-}
