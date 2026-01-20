@@ -720,6 +720,57 @@ article[data-page].active {
     display: none !important;
 }
 
+.testimonials-modal {
+    background: var(--eerie-black2);
+    position: relative;
+    padding: 20px;
+    border: 1px solid var(--jet);
+    border-radius: 14px;
+    box-shadow: var(--shadow5);
+    transform: scale(1.2);
+    opacity: 0;
+    transition: var(--transition1);
+    z-index: 2;
+    max-width: 90%;
+    width: 100%;
+    max-height: 80vh;
+    overflow: hidden;
+    display: flex;
+}
+
+.modal-content {
+    overflow-y: auto;
+    flex: 1;
+    padding-right: 10px;
+    margin-right: -5px;
+}
+
+.modal-text {
+    color: var(--light-gray);
+    font-size: var(--fs6);
+    font-weight: var(--fw300);
+    line-height: 1.6;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.modal-content::-webkit-scrollbar,
+.modal-text::-webkit-scrollbar {
+    width: 6px;
+}
+
+.modal-content::-webkit-scrollbar-track,
+.modal-text::-webkit-scrollbar-track {
+    background: var(--onyx);
+    border-radius: 10px;
+}
+
+.modal-content::-webkit-scrollbar-thumb,
+.modal-text::-webkit-scrollbar-thumb {
+    background: var(--orange-yellow-crayola);
+    border-radius: 10px;
+}
+
 /* ==========================================================================
    13. CERTIFICATES
    ========================================================================== */

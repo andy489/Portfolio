@@ -11,7 +11,6 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeCertModal();
     initializeTestimonialPdfViewer();
 
-    // Set up existing modals if they exist
     if (document.getElementById('pdfModal')) {
         setupPdfModalClose();
     }
@@ -23,17 +22,14 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('=== ALL COMPONENTS INITIALIZED ===');
 });
 
-// Detect iOS
 function isIOS() {
     return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 }
 
-// Detect Safari
 function isSafari() {
     return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 }
 
-// Get PDF viewer URL - handles iOS Safari specially
 function getPdfViewerUrl(pdfUrl) {
     return pdfUrl + '#view=FitH&scrollbar=1&toolbar=1&navpanes=1';
 }
@@ -71,8 +67,76 @@ function initializeTestimonials() {
 
     if (!testimonialsItem.length || !modalContainer) return;
 
+    const escHandler = function(e) {
+        if (e.key === 'Escape' && modalContainer.classList.contains('active')) {
+            closeTestimonialModal();
+        }
+    };
+
+    const closeTestimonialModal = function() {
+        modalContainer.classList.remove('active');
+        overlay.classList.remove('active');
+        document.removeEventListener('keydown', escHandler);
+
+        const readMoreBtn = document.querySelector('.read-more-btn');
+        if (readMoreBtn) readMoreBtn.remove();
+    };
+
+    const openTestimonialModal = function() {
+        modalContainer.classList.add('active');
+        overlay.classList.add('active');
+        document.addEventListener('keydown', escHandler);
+    };
+
+    function truncateText(text, maxLength = 500) {
+        if (text.length <= maxLength) return { text: text, isTruncated: false };
+
+        const lastSpaceIndex = text.lastIndexOf(' ', maxLength);
+        const truncatedText = text.substring(0, lastSpaceIndex) + '...';
+        return { text: truncatedText, isTruncated: true, fullText: text };
+    }
+
+    function createReadMoreButton(fullText, modalTextElement) {
+        const readMoreBtn = document.createElement('button');
+        readMoreBtn.className = 'read-more-btn';
+        readMoreBtn.innerHTML = '<i class="fas fa-chevron-down"></i> Read More';
+        readMoreBtn.style.cssText = `
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 10px;
+            padding: 5px 10px;
+            background: var(--onyx);
+            color: var(--orange-yellow-crayola);
+            border: 1px solid var(--orange-yellow-crayola);
+            border-radius: 6px;
+            font-size: var(--fs7);
+            cursor: pointer;
+            transition: var(--transition1);
+        `;
+
+        let isExpanded = false;
+        readMoreBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            if (!isExpanded) {
+                modalTextElement.textContent = fullText;
+                this.innerHTML = '<i class="fas fa-chevron-up"></i> Show Less';
+                isExpanded = true;
+            } else {
+                const truncated = truncateText(fullText, 500);
+                modalTextElement.textContent = truncated.text;
+                this.innerHTML = '<i class="fas fa-chevron-down"></i> Read More';
+                isExpanded = false;
+            }
+        });
+
+        return readMoreBtn;
+    }
+
     for (let i = 0; i < testimonialsItem.length; i++) {
-        testimonialsItem[i].addEventListener('click', function () {
+        testimonialsItem[i].addEventListener('click', function() {
             const testimonialItem = this.closest('.testimonials-item');
             const pdfUrl = testimonialItem.getAttribute('data-pdf-url');
 
@@ -80,7 +144,19 @@ function initializeTestimonials() {
                 modalImg.src = this.querySelector('[data-testimonials-avatar]').src;
                 modalImg.alt = this.querySelector('[data-testimonials-avatar]').alt;
                 modalTitle.innerHTML = this.querySelector('[data-testimonials-title]').innerHTML;
-                modalText.innerHTML = this.querySelector('[data-testimonials-text]').innerHTML;
+
+                const fullText = this.querySelector('[data-testimonials-text]').textContent;
+
+                const truncated = truncateText(fullText, 360);
+                modalText.textContent = truncated.text;
+
+                const existingBtn = document.querySelector('.read-more-btn');
+                if (existingBtn) existingBtn.remove();
+
+                if (truncated.isTruncated) {
+                    const readMoreBtn = createReadMoreButton(truncated.fullText, modalText);
+                    modalText.parentNode.insertBefore(readMoreBtn, modalText.nextSibling);
+                }
             }
 
             const testimonialDate = testimonialItem.getAttribute('data-testimonial-date');
@@ -100,21 +176,16 @@ function initializeTestimonials() {
                 }
             }
 
-            testimonialsModalFunc();
+            openTestimonialModal();
         });
     }
 
-    const testimonialsModalFunc = function () {
-        modalContainer.classList.toggle('active');
-        overlay.classList.toggle('active');
-    };
-
     if (modalCloseBtn) {
-        modalCloseBtn.addEventListener('click', testimonialsModalFunc);
+        modalCloseBtn.addEventListener('click', closeTestimonialModal);
     }
 
     if (overlay) {
-        overlay.addEventListener('click', testimonialsModalFunc);
+        overlay.addEventListener('click', closeTestimonialModal);
     }
 }
 
@@ -129,7 +200,7 @@ function initializeTestimonialPdfViewer() {
 
         const pdfUrl = this.getAttribute('data-pdf-url');
         if (pdfUrl) {
-            openPdf(pdfUrl, true); // true = coming from testimonial modal
+            openPdf(pdfUrl, true);
         }
     });
 }
@@ -153,7 +224,6 @@ function createPdfModal() {
     `;
     document.body.appendChild(pdfModal);
 
-    // Add download link functionality
     const downloadLink = pdfModal.querySelector('.pdf-download-link');
     if (downloadLink) {
         downloadLink.addEventListener('click', function(e) {
@@ -173,7 +243,6 @@ function setupPdfModalClose() {
 
     if (!pdfModal) return;
 
-    // Close function
     const closePdfModalFunc = function() {
         pdfModal.style.display = 'none';
         document.body.style.overflow = 'auto';
@@ -182,7 +251,6 @@ function setupPdfModalClose() {
             pdfViewerFrame.src = '';
         }
 
-        // Remove escape key handler
         if (pdfModal.escHandler) {
             document.removeEventListener('keydown', pdfModal.escHandler);
             delete pdfModal.escHandler;
@@ -199,7 +267,6 @@ function setupPdfModalClose() {
         }
     });
 
-    // Add escape key listener
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape' && pdfModal.style.display === 'block') {
             closePdfModalFunc();
@@ -216,12 +283,10 @@ function initializePortfolio() {
 
     if (!select) return;
 
-    // Toggle dropdown on click
     select.addEventListener('click', function (e) {
         e.stopPropagation();
         this.classList.toggle("active");
 
-        // Change chevron icon
         if (selectIcon) {
             if (this.classList.contains("active")) {
                 selectIcon.classList.remove("fa-chevron-down");
@@ -230,7 +295,6 @@ function initializePortfolio() {
             } else {
                 selectIcon.classList.remove("fa-chevron-up");
                 selectIcon.classList.add("fa-chevron-down");
-                // Keep chevron yellow if an item is selected
                 const selectedItem = document.querySelector('.select-item button.active');
                 if (selectedItem && selectedItem.textContent !== "All") {
                     selectIcon.style.color = "var(--orange-yellow-crayola)";
@@ -241,7 +305,6 @@ function initializePortfolio() {
         }
     });
 
-    // Close dropdown when clicking outside
     document.addEventListener('click', function (e) {
         if (!select.contains(e.target)) {
             select.classList.remove("active");
@@ -249,7 +312,6 @@ function initializePortfolio() {
                 selectIcon.classList.remove("fa-chevron-up");
                 selectIcon.classList.add("fa-chevron-down");
 
-                // Keep chevron yellow if an item is selected
                 const selectedItem = document.querySelector('.select-item button.active');
                 if (selectedItem && selectedItem.textContent !== "All") {
                     selectIcon.style.color = "var(--orange-yellow-crayola)";
@@ -260,7 +322,6 @@ function initializePortfolio() {
         }
     });
 
-    // Handle item selection
     for(let i = 0; i < selectItems.length; i++) {
         selectItems[i].addEventListener('click', function(e) {
             e.stopPropagation();
@@ -268,7 +329,6 @@ function initializePortfolio() {
             let selectedValue = this.innerText.toLowerCase();
             let displayValue = this.innerText;
 
-            // Update the selected value display
             if (selectValue) {
                 selectValue.textContent = displayValue;
             }
@@ -278,22 +338,18 @@ function initializePortfolio() {
                 item.classList.remove('active');
             });
 
-            // Add active class to clicked item
             this.classList.add('active');
 
-            // Make chevron yellow when an item is selected
             if (selectIcon) {
                 selectIcon.style.color = "var(--orange-yellow-crayola)";
             }
 
-            // Close dropdown
             select.classList.remove("active");
             if (selectIcon) {
                 selectIcon.classList.remove("fa-chevron-up");
                 selectIcon.classList.add("fa-chevron-down");
             }
 
-            // Filter the portfolio items
             filterFunc(selectedValue);
         });
     }
@@ -312,19 +368,16 @@ function initializePortfolio() {
         }
     }
 
-    // Initialize desktop filter buttons
     let lastClickedBtn = filterBtn[0];
 
     for (let i = 0; i < filterBtn.length; i++) {
         filterBtn[i].addEventListener('click', function() {
             let selectedValue = this.innerText.toLowerCase();
 
-            // Update mobile dropdown value
             if (selectValue) {
                 selectValue.textContent = this.innerText;
             }
 
-            // Update mobile dropdown active item
             selectItems.forEach((item, index) => {
                 if (item.textContent.toLowerCase() === selectedValue) {
                     item.classList.add('active');
@@ -333,21 +386,18 @@ function initializePortfolio() {
                 }
             });
 
-            // Make chevron yellow
             if (selectIcon) {
                 selectIcon.style.color = "var(--orange-yellow-crayola)";
             }
 
             filterFunc(selectedValue);
 
-            // Update desktop filter buttons
             lastClickedBtn.classList.remove('active');
             this.classList.add('active');
             lastClickedBtn = this;
         });
     }
 
-    // Initialize active state for chevron
     function updateChevronColor() {
         if (selectIcon) {
             const activeItem = document.querySelector('.select-item button.active');
@@ -359,7 +409,6 @@ function initializePortfolio() {
         }
     }
 
-    // Check initial state
     updateChevronColor();
 }
 
@@ -449,7 +498,6 @@ function initializeFormValidation() {
             });
         });
 
-        // Check initial state
         if (form.checkValidity()) {
             formBtn.removeAttribute('disabled');
         } else {
@@ -481,7 +529,6 @@ function initializeCertModal() {
 
         setupCertModalClose();
 
-        // Add download link functionality
         const downloadLink = certModal.querySelector('.cert-download-link');
         if (downloadLink) {
             downloadLink.addEventListener('click', function(e) {
@@ -502,7 +549,7 @@ function initializeCertModal() {
         const pdfUrl = this.getAttribute('href');
 
         if (pdfUrl && pdfUrl.toLowerCase().endsWith('.pdf')) {
-            openPdf(pdfUrl); // ← use the new shared function
+            openPdf(pdfUrl);
         } else {
             window.open(pdfUrl, '_blank');
         }
@@ -511,13 +558,11 @@ function initializeCertModal() {
 }
 
 function openPdf(pdfUrl, isFromTestimonial = false) {
-    // If it's iOS or Safari → open in new tab (best experience on mobile)
     if (isIOS() || isSafari()) {
         window.open(pdfUrl, '_blank');
-        return; // ← important: stop here, don't open modal
+        return;
     }
 
-    // For all other browsers → open your modal
     let pdfModal = document.getElementById('pdfModal');
     if (!pdfModal) {
         createPdfModal();
@@ -527,14 +572,12 @@ function openPdf(pdfUrl, isFromTestimonial = false) {
 
     const pdfViewerFrame = document.getElementById('pdfViewerFrame');
 
-    // Use direct PDF with view parameters (works great on Chrome, Firefox, Edge...)
     const directUrl = pdfUrl + '#view=FitH&scrollbar=1&toolbar=1&navpanes=1';
     pdfViewerFrame.src = directUrl;
 
     pdfModal.style.display = 'block';
     document.body.style.overflow = 'hidden';
 
-    // Close testimonial modal if it was open (for testimonial PDFs)
     if (isFromTestimonial) {
         const modalContainer = document.querySelector('[data-modal-container]');
         const overlay = document.querySelector('[data-overlay]');
@@ -544,7 +587,6 @@ function openPdf(pdfUrl, isFromTestimonial = false) {
         }
     }
 
-    // Escape key to close
     const escHandler = function(e) {
         if (e.key === 'Escape') {
             closePdfModal();
