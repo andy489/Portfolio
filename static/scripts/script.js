@@ -73,13 +73,28 @@ function initializeTestimonials() {
         }
     };
 
-    const closeTestimonialModal = function() {
+    const closeTestimonialModal = function(e) {
+
+        if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            e.stopImmediatePropagation();
+        }
+
         modalContainer.classList.remove('active');
         overlay.classList.remove('active');
         document.removeEventListener('keydown', escHandler);
 
+        document.activeElement.blur();
+
         const readMoreBtn = document.querySelector('.read-more-btn');
         if (readMoreBtn) readMoreBtn.remove();
+
+        if (e && e.cancelable) {
+            e.preventDefault();
+        }
+
+        return false;
     };
 
     const openTestimonialModal = function() {
@@ -180,12 +195,27 @@ function initializeTestimonials() {
         });
     }
 
-    if (modalCloseBtn) {
-        modalCloseBtn.addEventListener('click', closeTestimonialModal);
-    }
+if (modalCloseBtn) {
+    modalCloseBtn.addEventListener('click', closeTestimonialModal);
+    modalCloseBtn.addEventListener('touchend', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        closeTestimonialModal();
+    });
+
+    modalCloseBtn.style.cursor = 'pointer';
+    modalCloseBtn.setAttribute('tabindex', '0');
+    modalCloseBtn.setAttribute('role', 'button');
+}
 
     if (overlay) {
         overlay.addEventListener('click', closeTestimonialModal);
+        overlay.addEventListener('touchend', function(e) {
+            if (e.target === overlay) {
+                e.preventDefault();
+                closeTestimonialModal();
+            }
+        });
     }
 }
 

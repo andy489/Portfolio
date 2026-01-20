@@ -646,6 +646,12 @@ article[data-page].active {
     color: var(--white2);
     font-size: 18px;
     opacity: .7;
+
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    tap-highlight-color: transparent;
+    min-width: 44px;
+    min-height: 44px;
 }
 
 .modal-close-btn:hover, .modal-close-btn:focus { opacity: 1; }
@@ -1592,8 +1598,25 @@ textarea.form-input {
     to { transform: translateY(-50%) scale(1); }
 }
 
-/* Mobile-specific fixes */
+.modal-close-btn i {
+    pointer-events: none;
+}
+
 @media (max-width: 768px) {
+    .modal-close-btn {
+        width: 44px !important;
+        height: 44px !important;
+        font-size: 22px !important;
+        top: 10px !important;
+        right: 10px !important;
+    }
+
+    .testimonials-modal {
+        touch-action: manipulation;
+        -webkit-text-size-adjust: 100%;
+    }
+
+
     .cert-pdf-container,
     .pdf-pdf-container {
         height: 70vh;
