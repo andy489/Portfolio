@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeCertModal();
     initializeTestimonialPdfViewer();
     initializeScrollIndicators();
+    initializeInteractiveScroll();
 
 
     if (document.getElementById('pdfModal')) {
@@ -54,6 +55,184 @@ function initializeSidebar() {
             }
         });
     }
+}
+
+function initializeInteractiveScroll() {
+    console.log('=== INITIALIZING INTERACTIVE SCROLL ===');
+
+    const scrollContainers = document.querySelectorAll('.testimonials-list, .cert-list');
+
+    scrollContainers.forEach(container => {
+        // Add touch hint element for mobile
+        if (window.innerWidth <= 768) {
+            addMobileTouchHint(container);
+        }
+
+        // Add scroll reveal on interaction
+        setupScrollReveal(container);
+
+        // Add scroll indicator arrows
+        addScrollArrows(container);
+    });
+
+    function addMobileTouchHint(container) {
+        const hint = document.createElement('div');
+        hint.className = 'scroll-mobile-hint';
+        hint.innerHTML = '<i class="fas fa-arrows-left-right" style="margin-right: 6px; color: var(--golden-sand);"></i> <span style="color: var(--light-gray70); display: inline; font-weight: 300; font-size: 0.8em;">Touch to scroll</span>';
+
+        // Position hint
+        container.parentNode.style.position = 'relative';
+        container.parentNode.appendChild(hint);
+
+        // Hide hint when scrolling starts
+        let scrollTimeout;
+        container.addEventListener('scroll', () => {
+            hint.style.opacity = '0';
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+                if (!container.classList.contains('scroll-revealed')) {
+                    hint.style.opacity = '0.7';
+                }
+            }, 3000);
+        });
+    }
+
+    function setupScrollReveal(container) {
+        let revealTimeout;
+        let isRevealed = false;
+
+        // Reveal scrollbar on hover
+        container.addEventListener('mouseenter', () => {
+            if (!isRevealed) {
+                container.classList.add('scroll-revealed');
+                isRevealed = true;
+            }
+            clearTimeout(revealTimeout);
+        });
+
+        // Hide scrollbar after delay
+        container.addEventListener('mouseleave', () => {
+            revealTimeout = setTimeout(() => {
+                container.classList.remove('scroll-revealed');
+                isRevealed = false;
+            }, 1000);
+        });
+
+        // Touch devices: reveal on touch start
+        container.addEventListener('touchstart', () => {
+            container.classList.add('scroll-revealed');
+            isRevealed = true;
+            clearTimeout(revealTimeout);
+        });
+
+        // Keep revealed while touching
+        container.addEventListener('touchmove', () => {
+            clearTimeout(revealTimeout);
+        });
+
+        // Hide after touch ends
+        container.addEventListener('touchend', () => {
+            revealTimeout = setTimeout(() => {
+                container.classList.remove('scroll-revealed');
+                isRevealed = false;
+            }, 1500);
+        });
+
+        // Also hide on scroll end
+        let scrollEndTimeout;
+        container.addEventListener('scroll', () => {
+            container.classList.add('scroll-revealed');
+            isRevealed = true;
+            clearTimeout(scrollEndTimeout);
+            scrollEndTimeout = setTimeout(() => {
+                if (!container.matches(':hover') && !container.matches(':active')) {
+                    container.classList.remove('scroll-revealed');
+                    isRevealed = false;
+                }
+            }, 2000);
+        });
+    }
+
+    function addScrollArrows(container) {
+        const arrows = document.createElement('div');
+        arrows.className = 'scroll-indicator-arrows';
+        arrows.innerHTML = `
+            <i class="fas fa-chevron-left" style="color: var(--golden-sand);"></i>
+            <i class="fas fa-chevron-right" style="color: var(--golden-sand);"></i>
+        `;
+
+        container.parentNode.appendChild(arrows);
+
+        // Update arrow visibility based on scroll position
+        const updateArrows = () => {
+            const leftArrow = arrows.querySelector('.fa-chevron-left');
+            const rightArrow = arrows.querySelector('.fa-chevron-right');
+
+            // Show left arrow if not at start
+            if (container.scrollLeft > 10) {
+                leftArrow.style.opacity = '1';
+            } else {
+                leftArrow.style.opacity = '0.3';
+            }
+
+            // Show right arrow if not at end
+            if (container.scrollLeft + container.clientWidth < container.scrollWidth - 10) {
+                rightArrow.style.opacity = '1';
+            } else {
+                rightArrow.style.opacity = '0.3';
+            }
+        };
+
+        container.addEventListener('scroll', updateArrows);
+        updateArrows(); // Initial update
+    }
+
+    // Add touch target for easier scrolling on mobile
+    function addTouchScrollTarget(container) {
+        if (window.innerWidth <= 768) {
+            const touchTarget = document.createElement('div');
+            touchTarget.className = 'scroll-touch-hint';
+            touchTarget.setAttribute('aria-label', 'Scroll horizontally');
+
+            // Insert before the container
+            container.parentNode.insertBefore(touchTarget, container);
+
+            // When touch target is active, reveal scrollbar
+            touchTarget.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                container.classList.add('scroll-revealed');
+
+                // Simulate scroll on touch target drag
+                let startX = e.touches[0].clientX;
+                let scrollLeft = container.scrollLeft;
+
+                const handleTouchMove = (e) => {
+                    const deltaX = e.touches[0].clientX - startX;
+                    container.scrollLeft = scrollLeft - deltaX * 2;
+                };
+
+                const handleTouchEnd = () => {
+                    document.removeEventListener('touchmove', handleTouchMove);
+                    document.removeEventListener('touchend', handleTouchEnd);
+
+                    // Keep scrollbar visible for a moment
+                    setTimeout(() => {
+                        if (!container.matches(':hover') && !container.matches(':active')) {
+                            container.classList.remove('scroll-revealed');
+                        }
+                    }, 1000);
+                };
+
+                document.addEventListener('touchmove', handleTouchMove);
+                document.addEventListener('touchend', handleTouchEnd);
+            });
+        }
+    }
+
+    // Initialize for each container
+    scrollContainers.forEach(addTouchScrollTarget);
+
+    console.log('=== INTERACTIVE SCROLL INITIALIZED ===');
 }
 
 function initializeScrollIndicators() {
@@ -108,13 +287,6 @@ function initializeScrollIndicators() {
 
         // Check on scroll
         testimonialsList.addEventListener('scroll', () => updateScrollIndicators(testimonialsList));
-
-        // Add scroll hint element
-        const scrollHint = document.createElement('div');
-        scrollHint.className = 'scroll-hint';
-        scrollHint.innerHTML = '<i class="fas fa-chevron-right"></i>';
-        testimonialsList.parentNode.style.position = 'relative';
-        testimonialsList.parentNode.appendChild(scrollHint);
     }
 
     // Initialize certificates scroll indicators
@@ -128,13 +300,6 @@ function initializeScrollIndicators() {
 
         // Check on scroll
         certList.addEventListener('scroll', () => updateScrollIndicators(certList));
-
-        // Add scroll hint element
-        const scrollHint = document.createElement('div');
-        scrollHint.className = 'scroll-hint';
-        scrollHint.innerHTML = '<i class="fas fa-chevron-right"></i>';
-        certList.parentNode.style.position = 'relative';
-        certList.parentNode.appendChild(scrollHint);
     }
 
     // Add touch/swipe hints for mobile

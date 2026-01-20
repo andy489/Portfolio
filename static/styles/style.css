@@ -528,8 +528,7 @@ article[data-page].active {
     align-items: flex-start;
     gap: 15px;
     margin: 0 -15px;
-    padding: 25px 15px;
-    padding-bottom: 35px;
+    padding: 12px 15px;
     overflow-x: auto;
     scroll-behavior: smooth;
     overscroll-behavior-inline: contain;
@@ -1638,7 +1637,6 @@ textarea.form-input {
 .testimonials-list {
     position: relative;
     padding-top: 5px;
-    padding-bottom: 5px;
 }
 
 /* Left fade gradient */
@@ -1698,7 +1696,7 @@ textarea.form-input {
 .cert-list {
     position: relative;
     padding-top: 5px;
-    padding-bottom: 5px;
+    padding-bottom: 12px;
 }
 
 /* Left fade gradient for certs */
@@ -2542,7 +2540,7 @@ textarea.form-input {
         gap: 30px;
         margin: 0;
         padding: 30px;
-        padding-bottom: 35px;
+        padding-bottom: 12px;
     }
 
     .content-card {
@@ -2667,7 +2665,7 @@ textarea.form-input {
 
     .cert-list {
         grid-template-columns: repeat(2, 1fr);
-        padding: 0 15px;
+        padding: 12px 15px;
     }
 
     .cert-img-wrapper {
