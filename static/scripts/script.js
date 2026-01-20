@@ -65,6 +65,38 @@ function initializeTestimonials() {
     const modalDate = document.querySelector('[data-modal-date]');
     const pdfButton = document.getElementById('testimonialPdfButton');
 
+    document.addEventListener('click', function(e) {
+        // Check if click is on close button
+        if (e.target.closest('[data-modal-close-btn]')) {
+            closeTestimonialModal(e);
+            return;
+        }
+
+        // Check if click is on overlay
+        if (e.target === overlay && overlay.classList.contains('active')) {
+            closeTestimonialModal(e);
+            return;
+        }
+    });
+
+    document.addEventListener('touchend', function(e) {
+        // Check if touch is on close button
+        if (e.target.closest('[data-modal-close-btn]')) {
+            e.preventDefault();
+            e.stopPropagation();
+            closeTestimonialModal(e);
+            return;
+        }
+
+        // Check if touch is on overlay
+        if (e.target === overlay && overlay.classList.contains('active')) {
+            e.preventDefault();
+            e.stopPropagation();
+            closeTestimonialModal(e);
+            return;
+        }
+    }, { passive: false });
+
     if (!testimonialsItem.length || !modalContainer) return;
 
     const escHandler = function(e) {
