@@ -184,16 +184,23 @@ class MusicPlayer {
         this.bindEvents();
         this.loadTrack(this.state.currentTrackIndex);
 
+        // Set initial state to paused (not playing)
         this.elements.musicPlayer.classList.add('paused');
         this.elements.musicToggle.classList.remove('playing');
+        this.state.isPlaying = false;
+
+        // Remove localStorage musicPlaying state on page load
+        // This ensures music won't autoplay on subsequent visits
+        localStorage.removeItem('musicPlaying');
 
         this.updatePlayerState();
         this.updateVolumeIcon();
         this.updateSliderPercentages();
 
-        if (localStorage.getItem('musicPlaying') === 'true') {
-            this.attemptAutoplay();
-        }
+        // REMOVE THIS ENTIRE BLOCK - no autoplay anymore:
+        // if (localStorage.getItem('musicPlaying') === 'true') {
+        //     this.attemptAutoplay();
+        // }
     }
 
     attemptAutoplay() {
