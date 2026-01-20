@@ -65,6 +65,96 @@ function initializeTestimonials() {
     const modalDate = document.querySelector('[data-modal-date]');
     const pdfButton = document.getElementById('testimonialPdfButton');
 
+    // Create a fresh close button function
+    function createFreshCloseButton() {
+        // Create new button
+        const newCloseBtn = document.createElement('button');
+        newCloseBtn.className = 'modal-close-btn';
+        newCloseBtn.setAttribute('data-modal-close-btn', '');
+        newCloseBtn.innerHTML = '<i class="fas fa-xmark"></i>';
+
+        // Add iOS-friendly attributes
+        newCloseBtn.style.cssText = `
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+            tap-highlight-color: transparent;
+            min-width: 44px;
+            min-height: 44px;
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--onyx);
+            border-radius: 8px;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--white2);
+            font-size: 18px;
+            opacity: 0.7;
+            border: none;
+            z-index: 1000;
+        `;
+
+        // Add fresh event handler
+        newCloseBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            e.stopImmediatePropagation();
+
+            modalContainer.classList.remove('active');
+            overlay.classList.remove('active');
+            document.removeEventListener('keydown', escHandler);
+
+            // Remove and recreate button for next time
+            setTimeout(() => {
+                if (this.parentNode) {
+                    this.parentNode.removeChild(this);
+                    const modalContent = document.querySelector('.testimonials-modal');
+                    if (modalContent) {
+                        createFreshCloseButton();
+                    }
+                }
+            }, 0);
+
+            return false;
+        });
+
+        // Add touch handler for iOS
+        newCloseBtn.addEventListener('touchend', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            e.stopImmediatePropagation();
+
+            modalContainer.classList.remove('active');
+            overlay.classList.remove('active');
+            document.removeEventListener('keydown', escHandler);
+
+            setTimeout(() => {
+                if (this.parentNode) {
+                    this.parentNode.removeChild(this);
+                    const modalContent = document.querySelector('.testimonials-modal');
+                    if (modalContent) {
+                        createFreshCloseButton();
+                    }
+                }
+            }, 0);
+
+            return false;
+        }, { passive: false });
+
+        // Add to modal
+        const modalContent = document.querySelector('.testimonials-modal');
+        if (modalContent) {
+            modalContent.appendChild(newCloseBtn);
+        }
+
+        return newCloseBtn;
+    }
+
+    createFreshCloseButton();
+
     document.addEventListener('click', function(e) {
         // Check if click is on close button
         if (e.target.closest('[data-modal-close-btn]')) {
