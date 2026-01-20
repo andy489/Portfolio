@@ -74,16 +74,18 @@ function initializeTestimonials() {
     };
 
     const closeTestimonialModal = function(e) {
-
         if (e) {
             e.preventDefault();
             e.stopPropagation();
-            e.stopImmediatePropagation();
         }
 
         modalContainer.classList.remove('active');
         overlay.classList.remove('active');
         document.removeEventListener('keydown', escHandler);
+
+        document.body.classList.remove('modal-open');
+        document.body.style.overflow = 'auto';
+        document.body.style.position = 'static';
 
         document.activeElement.blur();
 
@@ -101,6 +103,15 @@ function initializeTestimonials() {
         modalContainer.classList.add('active');
         overlay.classList.add('active');
         document.addEventListener('keydown', escHandler);
+
+        document.body.classList.add('modal-open');
+        document.body.style.overflow = 'hidden';
+        document.body.style.position = 'fixed';
+        document.body.style.width = '100%';
+    };
+
+    const isTouchDevice = function() {
+        return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
     };
 
     function truncateText(text, maxLength = 500) {
@@ -195,26 +206,51 @@ function initializeTestimonials() {
         });
     }
 
-if (modalCloseBtn) {
-    modalCloseBtn.addEventListener('click', closeTestimonialModal);
-    modalCloseBtn.addEventListener('touchend', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        closeTestimonialModal();
-    });
+    if (modalCloseBtn) {
+        const newCloseBtn = modalCloseBtn.cloneNode(true);
+        modalCloseBtn.parentNode.replaceChild(newCloseBtn, modalCloseBtn);
 
-    modalCloseBtn.style.cursor = 'pointer';
-    modalCloseBtn.setAttribute('tabindex', '0');
-    modalCloseBtn.setAttribute('role', 'button');
-}
+        newCloseBtn.addEventListener('click', closeTestimonialModal);
+        newCloseBtn.addEventListener('touchend', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            closeTestimonialModal(e);
+        });
+
+        newCloseBtn.addEventListener('touchstart', function(e) {
+            e.stopPropagation();
+        });
+
+        newCloseBtn.style.cursor = 'pointer';
+        newCloseBtn.style.cssText += `
+            -webkit-tap-highlight-color: rgba(0,0,0,0);
+            -webkit-touch-callout: none;
+            user-select: none;
+        `;
+        newCloseBtn.setAttribute('tabindex', '0');
+        newCloseBtn.setAttribute('role', 'button');
+        newCloseBtn.setAttribute('aria-label', 'Close modal');
+
+        newCloseBtn.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                closeTestimonialModal(e);
+            }
+        });
+    }
 
     if (overlay) {
         overlay.addEventListener('click', closeTestimonialModal);
         overlay.addEventListener('touchend', function(e) {
             if (e.target === overlay) {
                 e.preventDefault();
-                closeTestimonialModal();
+                e.stopPropagation();
+                closeTestimonialModal(e);
             }
+        });
+
+        overlay.addEventListener('touchstart', function(e) {
+            e.stopPropagation();
         });
     }
 }
