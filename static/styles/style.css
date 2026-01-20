@@ -283,6 +283,7 @@ article[data-page].active {
 }
 
 .info-content .title {
+    display:inline;
     color: var(--white1);
     background: var(--onyx);
     font-size: var(--fs8);
@@ -2257,8 +2258,13 @@ textarea.form-input {
         gap: 30px;
     }
 
-    .info-content .name { margin-bottom: 15px; }
-    .info-content .title { padding: 5px 10px; }
+    .info-content .name {
+        margin-bottom: 15px;
+    }
+
+    .info-content .title {
+        padding: 5px 10px;
+    }
 
     .info-more-btn {
         top: -30px;

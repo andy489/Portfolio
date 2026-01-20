@@ -207,6 +207,28 @@ function initializeTestimonials() {
     }
 
     if (modalCloseBtn) {
+        const handleClose = function(e) {
+            if (e.cancelable) {
+                e.preventDefault();
+            }
+            e.stopPropagation();
+            e.stopImmediatePropagation();
+
+            modalContainer.classList.remove('active');
+            overlay.classList.remove('active');
+            document.removeEventListener('keydown', escHandler);
+
+            return false;
+        };
+
+        // Use pointer events which work better on iOS
+        modalCloseBtn.addEventListener('pointerdown', handleClose, { passive: false });
+        modalCloseBtn.addEventListener('click', handleClose, { passive: false });
+
+        // Force iOS to treat it as a button
+        modalCloseBtn.style.cursor = 'pointer';
+        modalCloseBtn.style.touchAction = 'manipulation';
+
         const newCloseBtn = modalCloseBtn.cloneNode(true);
         modalCloseBtn.parentNode.replaceChild(newCloseBtn, modalCloseBtn);
 
