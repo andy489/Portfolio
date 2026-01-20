@@ -520,7 +520,7 @@ article[data-page].active {
    ========================================================================== */
 
 .testimonials { margin-bottom: 30px; }
-.testimonials-title { margin-bottom: 20px; }
+.testimonials-title { margin-bottom: 10px; }
 
 .testimonials-list {
     display: flex;
@@ -1636,7 +1636,7 @@ textarea.form-input {
 
 .testimonials-list {
     position: relative;
-    padding-top: 5px;
+    padding-top: 25px;
 }
 
 /* Left fade gradient */
