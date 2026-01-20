@@ -88,6 +88,6 @@ def create_app():
 
 if __name__ == "__main__":
     portfolio_app = PortfolioApp()
-    portfolio_app.run(debug=True, port=int(os.environ.get('PORT', 5000)))
+    portfolio_app.run(debug=False, port=int(os.environ.get('PORT', 5000)))
 
 app = create_app()
