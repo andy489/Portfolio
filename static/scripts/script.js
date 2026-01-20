@@ -1,8 +1,6 @@
 'use strict';
 
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('=== PORTFOLIO SCRIPT INITIALIZATION ===');
-
     initializeSidebar();
     initializeTestimonials();
     initializePortfolio();
@@ -21,9 +19,42 @@ document.addEventListener('DOMContentLoaded', function() {
     if (document.querySelector('.cert-modal')) {
         setupCertModalClose();
     }
-
-    console.log('=== ALL COMPONENTS INITIALIZED ===');
 });
+
+let savedScrollY = 0;
+
+function lockBodyScroll() {
+    savedScrollY = window.pageYOffset || document.documentElement.scrollTop;
+
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${savedScrollY}px`;
+    document.body.style.width = '100%';
+    document.body.style.height = '100%';
+    document.body.style.overflow = 'hidden';
+    document.body.classList.add('modal-open');
+}
+
+function unlockBodyScroll() {
+    if (!document.body.classList.contains('modal-open')) {
+        return;
+    }
+    const y = savedScrollY;
+
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.width = '';
+    document.body.style.height = '';
+    document.body.style.overflow = '';
+    document.body.classList.remove('modal-open');
+
+    savedScrollY = 0;
+
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            window.scrollTo(0, y);
+        });
+    });
+}
 
 function isIOS() {
     return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
@@ -58,20 +89,15 @@ function initializeSidebar() {
 }
 
 function initializeInteractiveScroll() {
-    console.log('=== INITIALIZING INTERACTIVE SCROLL ===');
-
     const scrollContainers = document.querySelectorAll('.testimonials-list, .cert-list');
 
     scrollContainers.forEach(container => {
-        // Add touch hint element for mobile
         if (window.innerWidth <= 768) {
             addMobileTouchHint(container);
         }
 
-        // Add scroll reveal on interaction
         setupScrollReveal(container);
 
-        // Add scroll indicator arrows
         addScrollArrows(container);
     });
 
@@ -80,11 +106,9 @@ function initializeInteractiveScroll() {
         hint.className = 'scroll-mobile-hint';
         hint.innerHTML = '<i class="fas fa-arrows-left-right" style="margin-right: 6px; color: var(--golden-sand);"></i> <span style="color: var(--light-gray70); display: inline; font-weight: 300; font-size: 0.8em;">Touch to scroll</span>';
 
-        // Position hint
         container.parentNode.style.position = 'relative';
         container.parentNode.appendChild(hint);
 
-        // Hide hint when scrolling starts
         let scrollTimeout;
         container.addEventListener('scroll', () => {
             hint.style.opacity = '0';
@@ -101,7 +125,6 @@ function initializeInteractiveScroll() {
         let revealTimeout;
         let isRevealed = false;
 
-        // Reveal scrollbar on hover
         container.addEventListener('mouseenter', () => {
             if (!isRevealed) {
                 container.classList.add('scroll-revealed');
@@ -110,7 +133,6 @@ function initializeInteractiveScroll() {
             clearTimeout(revealTimeout);
         });
 
-        // Hide scrollbar after delay
         container.addEventListener('mouseleave', () => {
             revealTimeout = setTimeout(() => {
                 container.classList.remove('scroll-revealed');
@@ -118,19 +140,16 @@ function initializeInteractiveScroll() {
             }, 1000);
         });
 
-        // Touch devices: reveal on touch start
         container.addEventListener('touchstart', () => {
             container.classList.add('scroll-revealed');
             isRevealed = true;
             clearTimeout(revealTimeout);
         });
 
-        // Keep revealed while touching
         container.addEventListener('touchmove', () => {
             clearTimeout(revealTimeout);
         });
 
-        // Hide after touch ends
         container.addEventListener('touchend', () => {
             revealTimeout = setTimeout(() => {
                 container.classList.remove('scroll-revealed');
@@ -138,7 +157,6 @@ function initializeInteractiveScroll() {
             }, 1500);
         });
 
-        // Also hide on scroll end
         let scrollEndTimeout;
         container.addEventListener('scroll', () => {
             container.classList.add('scroll-revealed');
@@ -163,19 +181,16 @@ function initializeInteractiveScroll() {
 
         container.parentNode.appendChild(arrows);
 
-        // Update arrow visibility based on scroll position
         const updateArrows = () => {
             const leftArrow = arrows.querySelector('.fa-chevron-left');
             const rightArrow = arrows.querySelector('.fa-chevron-right');
 
-            // Show left arrow if not at start
             if (container.scrollLeft > 10) {
                 leftArrow.style.opacity = '1';
             } else {
                 leftArrow.style.opacity = '0.3';
             }
 
-            // Show right arrow if not at end
             if (container.scrollLeft + container.clientWidth < container.scrollWidth - 10) {
                 rightArrow.style.opacity = '1';
             } else {
@@ -184,25 +199,21 @@ function initializeInteractiveScroll() {
         };
 
         container.addEventListener('scroll', updateArrows);
-        updateArrows(); // Initial update
+        updateArrows();
     }
 
-    // Add touch target for easier scrolling on mobile
     function addTouchScrollTarget(container) {
         if (window.innerWidth <= 768) {
             const touchTarget = document.createElement('div');
             touchTarget.className = 'scroll-touch-hint';
             touchTarget.setAttribute('aria-label', 'Scroll horizontally');
 
-            // Insert before the container
             container.parentNode.insertBefore(touchTarget, container);
 
-            // When touch target is active, reveal scrollbar
             touchTarget.addEventListener('touchstart', (e) => {
                 e.preventDefault();
                 container.classList.add('scroll-revealed');
 
-                // Simulate scroll on touch target drag
                 let startX = e.touches[0].clientX;
                 let scrollLeft = container.scrollLeft;
 
@@ -215,7 +226,6 @@ function initializeInteractiveScroll() {
                     document.removeEventListener('touchmove', handleTouchMove);
                     document.removeEventListener('touchend', handleTouchEnd);
 
-                    // Keep scrollbar visible for a moment
                     setTimeout(() => {
                         if (!container.matches(':hover') && !container.matches(':active')) {
                             container.classList.remove('scroll-revealed');
@@ -229,31 +239,22 @@ function initializeInteractiveScroll() {
         }
     }
 
-    // Initialize for each container
     scrollContainers.forEach(addTouchScrollTarget);
-
-    console.log('=== INTERACTIVE SCROLL INITIALIZED ===');
 }
 
 function initializeScrollIndicators() {
-    console.log('=== INITIALIZING SCROLL INDICATORS ===');
-
-    // Function to check if element is scrollable
     function isScrollable(element) {
         return element.scrollWidth > element.clientWidth;
     }
 
-    // Function to check if scrolled to end
     function isScrolledToEnd(element) {
         return element.scrollLeft + element.clientWidth >= element.scrollWidth - 5;
     }
 
-    // Function to check if scrolled to start
     function isScrolledToStart(element) {
         return element.scrollLeft <= 5;
     }
 
-    // Function to update scroll indicators
     function updateScrollIndicators(element) {
         if (!isScrollable(element)) {
             element.classList.remove('scrollable');
@@ -276,48 +277,36 @@ function initializeScrollIndicators() {
         }
     }
 
-    // Initialize testimonials scroll indicators
     const testimonialsList = document.querySelector('.testimonials-list');
     if (testimonialsList) {
-        // Check on load
         setTimeout(() => updateScrollIndicators(testimonialsList), 100);
 
-        // Check on resize
         window.addEventListener('resize', () => updateScrollIndicators(testimonialsList));
 
-        // Check on scroll
         testimonialsList.addEventListener('scroll', () => updateScrollIndicators(testimonialsList));
     }
 
-    // Initialize certificates scroll indicators
     const certList = document.querySelector('.cert-list');
     if (certList) {
-        // Check on load
         setTimeout(() => updateScrollIndicators(certList), 100);
 
-        // Check on resize
         window.addEventListener('resize', () => updateScrollIndicators(certList));
 
-        // Check on scroll
         certList.addEventListener('scroll', () => updateScrollIndicators(certList));
     }
 
-    // Add touch/swipe hints for mobile
     function addSwipeHint() {
         if (window.innerWidth <= 768) {
-            // Check if we need to show hints
             const needsHints = testimonialsList && isScrollable(testimonialsList) ||
                                certList && isScrollable(certList);
 
             if (needsHints) {
-                // Show initial hint message
                 showScrollHintMessage();
             }
         }
     }
 
     function showScrollHintMessage() {
-        // Create hint message
         const hintMessage = document.createElement('div');
         hintMessage.className = 'scroll-hint-message';
         hintMessage.style.cssText = `
@@ -342,7 +331,6 @@ function initializeScrollIndicators() {
         hintMessage.innerHTML = '<i class="fas fa-arrows-left-right" style="margin-right: 8px;"></i> Swipe to see more';
         document.body.appendChild(hintMessage);
 
-        // Remove after animation
         setTimeout(() => {
             if (hintMessage.parentNode) {
                 hintMessage.parentNode.removeChild(hintMessage);
@@ -350,7 +338,6 @@ function initializeScrollIndicators() {
         }, 3000);
     }
 
-    // Add fadeInOut animation
     const style = document.createElement('style');
     style.textContent = `
         @keyframes fadeInOut {
@@ -360,7 +347,6 @@ function initializeScrollIndicators() {
             100% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
         }
 
-        /* iOS specific scrollbar styling */
         @supports (-webkit-touch-callout: none) {
             .has-scrollbar {
                 -webkit-overflow-scrolling: touch;
@@ -379,15 +365,10 @@ function initializeScrollIndicators() {
     `;
     document.head.appendChild(style);
 
-    // Initialize on page load
     window.addEventListener('load', addSwipeHint);
-
-    console.log('=== SCROLL INDICATORS INITIALIZED ===');
 }
 
 function initializeTestimonials() {
-    console.log('=== INITIALIZING TESTIMONIALS ===');
-
     const testimonialsItem = document.querySelectorAll('[data-testimonials-item]');
     const modalContainer = document.querySelector('[data-modal-container]');
     const modalCloseBtn = document.querySelector('[data-modal-close-btn]');
@@ -399,85 +380,54 @@ function initializeTestimonials() {
     const pdfButton = document.getElementById('testimonialPdfButton');
 
     if (!testimonialsItem.length || !modalContainer) {
-        console.log('No testimonials or modal container found');
         return;
     }
-
-    console.log(`Found ${testimonialsItem.length} testimonials`);
 
     let scrollY = 0;
     let escHandler = null;
 
-    // Function to close modal and restore scroll
     const closeTestimonialModal = function(e) {
-        console.log('Closing testimonial modal');
-
         if (e) {
             if (e.cancelable) e.preventDefault();
             e.stopPropagation();
             e.stopImmediatePropagation();
         }
 
-        // Close modal
         modalContainer.classList.remove('active');
         if (overlay) overlay.classList.remove('active');
 
-        // Remove escape key handler
         if (escHandler) {
             document.removeEventListener('keydown', escHandler);
             escHandler = null;
         }
 
-        // CRITICAL: Restore body scrolling
-        document.body.style.overflow = 'auto';
-        document.body.style.position = '';
-        document.body.style.top = '';
-        document.body.style.width = '';
-        document.body.style.height = '';
-        document.body.classList.remove('modal-open');
+        unlockBodyScroll();
 
-        // Restore scroll position
-        if (scrollY !== 0) {
-            console.log(`Restoring scroll position to: ${scrollY}`);
-            window.scrollTo(0, scrollY);
-            scrollY = 0;
-        }
-
-        // Remove read more button if exists
         const readMoreBtn = document.querySelector('.read-more-btn');
         if (readMoreBtn) {
-            console.log('Removing read more button');
             readMoreBtn.remove();
         }
 
-        // Blur any focused element
         if (document.activeElement) {
             document.activeElement.blur();
         }
 
-        // Recreate close button for next time
         setTimeout(createFreshCloseButton, 10);
 
         return false;
     };
 
-    // Function to create a fresh close button (iOS fix)
     function createFreshCloseButton() {
-        console.log('Creating fresh close button');
-
-        // Remove existing close button if any
         const existingCloseBtn = document.querySelector('[data-modal-close-btn]');
         if (existingCloseBtn && existingCloseBtn.parentNode) {
             existingCloseBtn.parentNode.removeChild(existingCloseBtn);
         }
 
-        // Create new button
         const newCloseBtn = document.createElement('button');
         newCloseBtn.className = 'modal-close-btn';
         newCloseBtn.setAttribute('data-modal-close-btn', '');
         newCloseBtn.innerHTML = '<i class="fas fa-xmark"></i>';
 
-        // Add iOS-friendly attributes and styles
         newCloseBtn.style.cssText = `
             cursor: pointer;
             -webkit-tap-highlight-color: transparent;
@@ -506,21 +456,17 @@ function initializeTestimonials() {
             -webkit-transform: translateZ(0);
         `;
 
-        // Add accessibility attributes
         newCloseBtn.setAttribute('aria-label', 'Close modal');
         newCloseBtn.setAttribute('role', 'button');
         newCloseBtn.setAttribute('tabindex', '0');
 
-        // Unified event handler
         const handleClose = function(e) {
-            console.log('Close button clicked/touched');
             if (e.cancelable) e.preventDefault();
             e.stopPropagation();
             e.stopImmediatePropagation();
             closeTestimonialModal(e);
         };
 
-        // Add multiple event listeners for maximum compatibility
         const events = ['click', 'touchend', 'pointerup'];
         events.forEach(eventType => {
             newCloseBtn.addEventListener(eventType, handleClose, {
@@ -529,12 +475,10 @@ function initializeTestimonials() {
             });
         });
 
-        // Prevent touchstart from bubbling
         newCloseBtn.addEventListener('touchstart', function(e) {
             e.stopPropagation();
         }, { passive: false });
 
-        // Add keyboard support
         newCloseBtn.addEventListener('keydown', function(e) {
             if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
@@ -542,11 +486,9 @@ function initializeTestimonials() {
             }
         });
 
-        // Add to modal
         const modalContent = document.querySelector('.testimonials-modal');
         if (modalContent) {
             modalContent.appendChild(newCloseBtn);
-            console.log('Close button added to modal');
         } else {
             console.error('Could not find testimonials-modal element');
         }
@@ -554,14 +496,10 @@ function initializeTestimonials() {
         return newCloseBtn;
     }
 
-    // Function to open modal
     const openTestimonialModal = function() {
-        console.log('Opening testimonial modal');
-
         modalContainer.classList.add('active');
         if (overlay) overlay.classList.add('active');
 
-        // Add escape key handler
         escHandler = function(e) {
             if (e.key === 'Escape') {
                 closeTestimonialModal(e);
@@ -570,7 +508,6 @@ function initializeTestimonials() {
         document.addEventListener('keydown', escHandler);
     };
 
-    // Function to truncate text
     function truncateText(text, maxLength = 500) {
         if (text.length <= maxLength) return { text: text, isTruncated: false };
 
@@ -579,10 +516,7 @@ function initializeTestimonials() {
         return { text: truncatedText, isTruncated: true, fullText: text };
     }
 
-    // Function to create read more button
     function createReadMoreButton(fullText, modalTextElement) {
-        console.log('Creating read more button');
-
         const readMoreBtn = document.createElement('button');
         readMoreBtn.className = 'read-more-btn';
         readMoreBtn.innerHTML = '<i class="fas fa-chevron-down"></i> Read More';
@@ -625,27 +559,13 @@ function initializeTestimonials() {
         return readMoreBtn;
     }
 
-    // Set up testimonials click handlers
     for (let i = 0; i < testimonialsItem.length; i++) {
         testimonialsItem[i].addEventListener('click', function() {
-            console.log(`Testimonial ${i + 1} clicked`);
-
             const testimonialItem = this.closest('.testimonials-item');
             const pdfUrl = testimonialItem.getAttribute('data-pdf-url');
 
-            // Save current scroll position BEFORE opening modal
-            scrollY = window.pageYOffset || document.documentElement.scrollTop;
-            console.log(`Saving scroll position: ${scrollY}`);
+            lockBodyScroll();
 
-            // Prevent body scroll
-            document.body.style.overflow = 'hidden';
-            document.body.style.position = 'fixed';
-            document.body.style.top = `-${scrollY}px`;
-            document.body.style.width = '100%';
-            document.body.style.height = '100%';
-            document.body.classList.add('modal-open');
-
-            // Set modal content
             if (modalImg && modalTitle && modalText) {
                 const avatarImg = this.querySelector('[data-testimonials-avatar]');
                 if (avatarImg) {
@@ -664,11 +584,9 @@ function initializeTestimonials() {
                     const truncated = truncateText(fullText, 360);
                     modalText.textContent = truncated.text;
 
-                    // Remove existing read more button
                     const existingBtn = document.querySelector('.read-more-btn');
                     if (existingBtn) existingBtn.remove();
 
-                    // Add new read more button if needed
                     if (truncated.isTruncated) {
                         const readMoreBtn = createReadMoreButton(truncated.fullText, modalText);
                         modalText.parentNode.insertBefore(readMoreBtn, modalText.nextSibling);
@@ -676,7 +594,6 @@ function initializeTestimonials() {
                 }
             }
 
-            // Set date
             const testimonialDate = testimonialItem.getAttribute('data-testimonial-date');
             if (testimonialDate && modalDate) {
                 try {
@@ -690,7 +607,6 @@ function initializeTestimonials() {
                 }
             }
 
-            // Set PDF button
             if (pdfButton) {
                 if (pdfUrl) {
                     pdfButton.setAttribute('data-pdf-url', pdfUrl);
@@ -700,12 +616,10 @@ function initializeTestimonials() {
                 }
             }
 
-            // Open modal
             openTestimonialModal();
         });
     }
 
-    // Set up overlay click handler
     if (overlay) {
         overlay.addEventListener('click', closeTestimonialModal);
         overlay.addEventListener('touchend', function(e) {
@@ -716,10 +630,7 @@ function initializeTestimonials() {
         }, { passive: false });
     }
 
-    // Initial close button creation
     createFreshCloseButton();
-
-    console.log('=== TESTIMONIALS INITIALIZED ===');
 }
 
 function initializeTestimonialPdfViewer() {
@@ -778,7 +689,7 @@ function setupPdfModalClose() {
 
     const closePdfModalFunc = function() {
         pdfModal.style.display = 'none';
-        document.body.style.overflow = 'auto';
+        unlockBodyScroll();
 
         if (pdfViewerFrame) {
             pdfViewerFrame.src = '';
@@ -866,7 +777,6 @@ function initializePortfolio() {
                 selectValue.textContent = displayValue;
             }
 
-            // Remove active class from all items
             selectItems.forEach(item => {
                 item.classList.remove('active');
             });
