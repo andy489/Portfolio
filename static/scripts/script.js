@@ -10,6 +10,8 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeFormValidation();
     initializeCertModal();
     initializeTestimonialPdfViewer();
+    initializeScrollIndicators();
+
 
     if (document.getElementById('pdfModal')) {
         setupPdfModalClose();
@@ -52,6 +54,170 @@ function initializeSidebar() {
             }
         });
     }
+}
+
+function initializeScrollIndicators() {
+    console.log('=== INITIALIZING SCROLL INDICATORS ===');
+
+    // Function to check if element is scrollable
+    function isScrollable(element) {
+        return element.scrollWidth > element.clientWidth;
+    }
+
+    // Function to check if scrolled to end
+    function isScrolledToEnd(element) {
+        return element.scrollLeft + element.clientWidth >= element.scrollWidth - 5;
+    }
+
+    // Function to check if scrolled to start
+    function isScrolledToStart(element) {
+        return element.scrollLeft <= 5;
+    }
+
+    // Function to update scroll indicators
+    function updateScrollIndicators(element) {
+        if (!isScrollable(element)) {
+            element.classList.remove('scrollable');
+            element.classList.remove('scrolled-to-end');
+            element.classList.remove('scrolled-to-start');
+            return;
+        }
+
+        element.classList.add('scrollable');
+
+        if (isScrolledToEnd(element)) {
+            element.classList.add('scrolled-to-end');
+            element.classList.remove('scrolled-to-start');
+        } else if (isScrolledToStart(element)) {
+            element.classList.add('scrolled-to-start');
+            element.classList.remove('scrolled-to-end');
+        } else {
+            element.classList.remove('scrolled-to-end');
+            element.classList.remove('scrolled-to-start');
+        }
+    }
+
+    // Initialize testimonials scroll indicators
+    const testimonialsList = document.querySelector('.testimonials-list');
+    if (testimonialsList) {
+        // Check on load
+        setTimeout(() => updateScrollIndicators(testimonialsList), 100);
+
+        // Check on resize
+        window.addEventListener('resize', () => updateScrollIndicators(testimonialsList));
+
+        // Check on scroll
+        testimonialsList.addEventListener('scroll', () => updateScrollIndicators(testimonialsList));
+
+        // Add scroll hint element
+        const scrollHint = document.createElement('div');
+        scrollHint.className = 'scroll-hint';
+        scrollHint.innerHTML = '<i class="fas fa-chevron-right"></i>';
+        testimonialsList.parentNode.style.position = 'relative';
+        testimonialsList.parentNode.appendChild(scrollHint);
+    }
+
+    // Initialize certificates scroll indicators
+    const certList = document.querySelector('.cert-list');
+    if (certList) {
+        // Check on load
+        setTimeout(() => updateScrollIndicators(certList), 100);
+
+        // Check on resize
+        window.addEventListener('resize', () => updateScrollIndicators(certList));
+
+        // Check on scroll
+        certList.addEventListener('scroll', () => updateScrollIndicators(certList));
+
+        // Add scroll hint element
+        const scrollHint = document.createElement('div');
+        scrollHint.className = 'scroll-hint';
+        scrollHint.innerHTML = '<i class="fas fa-chevron-right"></i>';
+        certList.parentNode.style.position = 'relative';
+        certList.parentNode.appendChild(scrollHint);
+    }
+
+    // Add touch/swipe hints for mobile
+    function addSwipeHint() {
+        if (window.innerWidth <= 768) {
+            // Check if we need to show hints
+            const needsHints = testimonialsList && isScrollable(testimonialsList) ||
+                               certList && isScrollable(certList);
+
+            if (needsHints) {
+                // Show initial hint message
+                showScrollHintMessage();
+            }
+        }
+    }
+
+    function showScrollHintMessage() {
+        // Create hint message
+        const hintMessage = document.createElement('div');
+        hintMessage.className = 'scroll-hint-message';
+        hintMessage.style.cssText = `
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--onyx);
+            color: var(--orange-yellow-crayola);
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-size: var(--fs6);
+            z-index: 1000;
+            box-shadow: var(--shadow4);
+            border: 1px solid var(--jet);
+            animation: fadeInOut 3s ease-in-out;
+            pointer-events: none;
+            text-align: center;
+            max-width: 90%;
+            white-space: nowrap;
+        `;
+        hintMessage.innerHTML = '<i class="fas fa-arrows-left-right" style="margin-right: 8px;"></i> Swipe to see more';
+        document.body.appendChild(hintMessage);
+
+        // Remove after animation
+        setTimeout(() => {
+            if (hintMessage.parentNode) {
+                hintMessage.parentNode.removeChild(hintMessage);
+            }
+        }, 3000);
+    }
+
+    // Add fadeInOut animation
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            15% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            85% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            100% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+        }
+
+        /* iOS specific scrollbar styling */
+        @supports (-webkit-touch-callout: none) {
+            .has-scrollbar {
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .has-scrollbar::-webkit-scrollbar {
+                -webkit-appearance: none;
+                height: 7px;
+            }
+
+            .has-scrollbar::-webkit-scrollbar-thumb {
+                background-color: var(--orange-yellow-crayola);
+                border-radius: 10px;
+            }
+        }
+    `;
+    document.head.appendChild(style);
+
+    // Initialize on page load
+    window.addEventListener('load', addSwipeHint);
+
+    console.log('=== SCROLL INDICATORS INITIALIZED ===');
 }
 
 function initializeTestimonials() {
