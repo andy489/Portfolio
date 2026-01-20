@@ -1629,6 +1629,228 @@ textarea.form-input {
     pointer-events: none;
 }
 
+/* ==========================================================================
+   TESTIMONIALS SCROLL INDICATORS
+   ========================================================================== */
+
+.testimonials-list {
+    position: relative;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+/* Left fade gradient */
+.testimonials-list::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 20px;
+    height: 100%;
+    background: linear-gradient(to right,
+        var(--eerie-black2) 0%,
+        transparent 100%);
+    pointer-events: none;
+    z-index: 2;
+    opacity: 0;
+    transition: opacity var(--transition1);
+}
+
+/* Right fade gradient - shows when scrollable */
+.testimonials-list::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 20px;
+    height: 100%;
+    background: linear-gradient(to left,
+        var(--eerie-black2) 0%,
+        transparent 100%);
+    pointer-events: none;
+    z-index: 2;
+    opacity: 0;
+    transition: opacity var(--transition1);
+}
+
+/* Show indicators when content overflows */
+.testimonials-list.scrollable::before,
+.testimonials-list.scrollable::after {
+    opacity: 1;
+}
+
+/* Pulsing animation for the right indicator */
+@keyframes pulseIndicator {
+    0%, 100% { opacity: 0.7; }
+    50% { opacity: 1; }
+}
+
+.testimonials-list.scrollable:not(.scrolled-to-end)::after {
+    animation: pulseIndicator 2s infinite;
+}
+
+/* ==========================================================================
+   CERTIFICATES SCROLL INDICATORS
+   ========================================================================== */
+
+.cert-list {
+    position: relative;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+/* Left fade gradient for certs */
+.cert-list::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 20px;
+    height: 100%;
+    background: linear-gradient(to right,
+        var(--eerie-black2) 0%,
+        transparent 100%);
+    pointer-events: none;
+    z-index: 2;
+    opacity: 0;
+    transition: opacity var(--transition1);
+}
+
+/* Right fade gradient for certs */
+.cert-list::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 20px;
+    height: 100%;
+    background: linear-gradient(to left,
+        var(--eerie-black2) 0%,
+        transparent 100%);
+    pointer-events: none;
+    z-index: 2;
+    opacity: 0;
+    transition: opacity var(--transition1);
+}
+
+/* Show indicators when content overflows */
+.cert-list.scrollable::before,
+.cert-list.scrollable::after {
+    opacity: 1;
+}
+
+/* Pulsing animation for certs */
+.cert-list.scrollable:not(.scrolled-to-end)::after {
+    animation: pulseIndicator 2s infinite;
+}
+
+/* ==========================================================================
+   CUSTOM SCROLLBAR FOR MOBILE
+   ========================================================================== */
+
+/* Show scrollbar on mobile */
+@media (max-width: 768px) {
+    .has-scrollbar {
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+        scrollbar-color: var(--orange-yellow-crayola) var(--onyx);
+    }
+
+    .has-scrollbar::-webkit-scrollbar {
+        height: 6px;
+        width: 6px;
+        display: block !important;
+    }
+
+    .has-scrollbar::-webkit-scrollbar-track {
+        background: var(--onyx);
+        border-radius: 10px;
+        margin: 0 10px;
+    }
+
+    .has-scrollbar::-webkit-scrollbar-thumb {
+        background: var(--orange-yellow-crayola);
+        border-radius: 10px;
+        opacity: 0.7;
+        transition: opacity var(--transition1);
+    }
+
+    .has-scrollbar::-webkit-scrollbar-thumb:hover {
+        opacity: 1;
+    }
+
+    /* Always show scrollbar on iOS */
+    @supports (-webkit-touch-callout: none) {
+        .has-scrollbar {
+            scrollbar-width: auto;
+        }
+
+        .has-scrollbar::-webkit-scrollbar {
+            -webkit-appearance: none;
+            display: block !important;
+        }
+    }
+}
+
+/* ==========================================================================
+   SCROLL HINT INDICATORS
+   ========================================================================== */
+
+.scroll-hint {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--orange-yellow-crayola);
+    font-size: 24px;
+    opacity: 0.7;
+    pointer-events: none;
+    z-index: 2;
+    animation: bounceHint 1.5s infinite;
+    display: none;
+}
+
+@keyframes bounceHint {
+    0%, 100% { transform: translateY(-50%) translateX(0); }
+    50% { transform: translateY(-50%) translateX(-5px); }
+}
+
+/* Show scroll hint on mobile when scrollable */
+@media (max-width: 768px) {
+    .testimonials-list.scrollable:not(.scrolled-to-end) .scroll-hint,
+    .cert-list.scrollable:not(.scrolled-to-end) .scroll-hint {
+        display: block;
+    }
+}
+
+/* ==========================================================================
+   SCROLL SNAP IMPROVEMENTS
+   ========================================================================== */
+
+.testimonials-list,
+.cert-list {
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 25px;
+}
+
+.testimonials-item,
+.cert-item {
+    scroll-snap-align: start;
+}
+
+/* Add slight shadow to items to show depth */
+.testimonials-item .content-card,
+.cert-item .cert-link {
+    box-shadow: var(--shadow2);
+    transition: transform var(--transition1), box-shadow var(--transition1);
+}
+
+.testimonials-item .content-card:hover,
+.cert-item .cert-link:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow3);
+}
+
 @media (max-width: 768px) {
     .modal-close-btn {
         width: 44px !important;
