@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 class KeepAliveService:
     """Handles periodic keep-alive requests to prevent app from sleeping on Render"""
 
-    def __init__(self, url: str, interval: int = 240):  # Changed to 4 minutes for safety
+    def __init__(self, url: str, interval: int = 720):  # Changed to 12 minutes for safety
         """
         Args:
             url: Full URL to ping (should be /keep-alive endpoint)
