@@ -127,6 +127,8 @@ def create_app():
     portfolio_app = PortfolioApp()
     return portfolio_app.app
 
+portfolio_app_instance = PortfolioApp()
+app = portfolio_app_instance.app
 
 if __name__ == "__main__":
     portfolio_app = PortfolioApp()
