@@ -46,6 +46,8 @@ class MusicPlayer {
             { title: "Wavdealer - Zima", file: "03.mp3" },
             { title: "Vision", file: "04.mp3" },
             { title: "White Light", file: "05.mp3" },
+            { title: "Freed from Desire", file: "06.mp3" },
+            { title: "Luz Roja", file: "07.mp3" },
         ];
     }
 
